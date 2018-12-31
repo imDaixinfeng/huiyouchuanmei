@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet" />
+    <script src="js/mui.view.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    
+    <style>
+    	.mui-page.mui-transitioning {
+    -webkit-transition: -webkit-transform 300ms ease;
+    transition: transform 300ms ease;
+}
+
+.mui-page-left {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.mui-ios .mui-page-left {
+    -webkit-transform: translate3d(-20%, 0, 0);
+    transform: translate3d(-20%, 0, 0);
+}
+
+.mui-navbar .mui-btn-nav {
+    -webkit-transition: none;
+    transition: none;
+    -webkit-transition-duration: .0s;
+    transition-duration: .0s;
+}
+
+.mui-navbar .mui-bar .mui-title {
+    display: inline-block;
+    width: auto;
+}
+
+.mui-page-shadow {
+    position: absolute;
+    right: 100%;
+    top: 0;
+    width: 16px;
+    height: 100%;
+    z-index: -1;
+    content: '';
+}
+
+.mui-page-shadow {
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+}
+
+.mui-navbar-inner.mui-transitioning,
+.mui-navbar-inner .mui-transitioning {
+    -webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.mui-page {
+    display: none;
+}
+
+.mui-pages .mui-page {
+    display: block;
+}
+.mui-page.mui-page-left{display: none;}
+    </style>
+</head>
+<body>
+	
+	<div class="mui-view">
+	    <div class="mui-navbar"></div>
+	    <div class="mui-pages"></div>
+	</div>
+	
+	<div class="mui-page" id="default_page">
+	    <!--header部分-->
+	    <header id="header" class=" mui-navbar-inner mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-back " style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">转出</h1>
+			<a href="#tixianlog" class="mui-icon-extra mui-icon-extra-order mui-pull-right" style="color:#FFF; line-height:44px;"></a>
+		</header>
+	    <!--内容区域-->
+	    <div class="mui-page-content">
+	    	
+	    	<div style="margin:44px 0 0 0;">
+				
+				<div style="height:8px;"></div>
+				
+				<div style="margin-bottom:100px;">
+					<style>
+						.mui-table-view-cell>input{width:200px; float:right; border:0; text-align: right;}
+					</style>
+					
+					<ul class="mui-table-view">
+							
+						<li class="mui-table-view-cell" style="line-height:40px;">
+							转出金额
+							<input type="text" class="mui-input-clear" placeholder="请输入转出金额" style="margin-bottom: 0; padding: 0;" id="money">
+						</li>
+						
+					</ul>
+					
+				</div>
+				
+				<div style="margin:20px 15px;">
+					<button type="button" class="mui-btn mui-btn-danger mui-btn-block" id="submit">确认</button>
+				</div>
+			
+			</div>
+	    	
+	    </div>
+	</div>
+	
+		
+	
+		<script src="js/jquery-3.3.1.min.js"></script>
+		
+		<script>
+			var viewApi = mui('.mui-view').view({
+			    defaultPage: '#default_page' //默认页面的选择器
+			});
+			var oldBack = mui.back;
+			mui.back = function() {
+			    if(viewApi.canBack()) {
+			        viewApi.back();
+			    } else {
+			        oldBack();
+			    }
+			};
+			
+			var token=null;
+			
+			setTimeout(function(){
+				token=plus.storage.getItem("token");
+				$.get(base_url+"index.php/user/tixianguize?token="+token,{},function(data){
+					$("#tixianguize").html(data);
+				});
+			},500);
+			
+			
+			document.getElementById("submit").addEventListener("click",function(){
+				var money=$("#money").val();
+				$.post(base_url+"index.php/user/zhuanchu",{token:token,money:money},function(data){
+					if(data.status){
+						mui.alert(data.error);
+						//location.reload();
+					}else{
+						mui.alert(data.error);
+					}
+				});
+			});
+			
+			
+			
+			
+		</script>
+		
+</body>
+</html>

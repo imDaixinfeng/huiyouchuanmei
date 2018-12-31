@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/feedback.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    
+    
+    
+</head>
+<body class="mui-fullscreen">
+	
+	
+		
+	
+	
+		<!--单页面开始-->
+		<div id="setting" class="mui-page">
+			<div class="mui-page-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+			<div style="background-image:url(images/54.png); background-repeat:no-repeat;height:222px; background-size: cover;">
+				<div style="padding:23px 0; text-align: center;">
+					
+					<div><img src="images/53.png" width="90" style="border-radius:45px; border: 1px solid #FFF; overflow: hidden; position: relative;" id="touxiang">
+					<span style="position:absolute;padding:3px 3px; background-color: #F0AD4E;border-radius:5px; color: #FFF; font-size:0.8rem; top:100px;right:110px; z-index:1000;" id="groupname">普通会员</span>
+					
+					</div>
+					<div style="margin-top:10px; color:#FFF;" id="username"></div>
+					
+				</div>
+				<ul class="mui-table-view mui-grid-view" style="background-color:transparent;" id="caiwuxinxi">
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <div class="mui-media-body" style="color:#FFF; height:auto; margin-top:0;"><span id="money">0</span><p style="color:#FFF;">总收入</p></div></a></li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <div class="mui-media-body" style="color:#FFF; height:auto;margin-top:0;"><span id="tmoney">0</span><p style="color:#FFF;">今日收入</p></div></a></li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			                <div class="mui-media-body" style="color:#FFF; height:auto;margin-top:0;"><span id="zmoney">0</span><p style="color:#FFF;">已支出</p></div></a></li>
+			    </ul>
+			</div>
+			<div style="height:8px;"></div>
+			<div>
+				<style>
+					.mui-navigate-right>img{width:1.5rem; float: left; margin-right:15px;}
+					.mui-table-view-cell{padding:13px 15px; border:0;}
+					.mui-table-view:before{background-color:#FFF;}
+					.mui-table-view:after{background-color: #FFF;}
+				</style>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" style="display:none">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="ziliao">
+							<img src="images/43.png">
+							个人资料
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="team">
+							<img src="images/45.png">
+							我的团队
+						</a>
+					</li>
+				</ul>
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="bank">
+							<img src="images/47.png">
+							绑定银行卡
+						</a>
+					</li>
+				</ul>
+				
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="qianbao">
+							<img src="images/44.png">
+							钱包
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="tixian">
+							<img src="images/62.png">
+							提现
+						</a>
+					</li>
+					<!--
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="zhuanchu">
+							<img src="images/63.png">
+							转出
+						</a>
+					</li>
+					-->
+				</ul>
+				
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="javascript:void(0)" id="logout">
+							<img src="images/46.png">
+							退出
+						</a>
+					</li>
+				</ul>
+				</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<!--单页面结束-->
+		
+		
+		
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="javascript:void(0)" id="home">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="javascript:void(0)" id="renwudating">
+				<span class="mui-icon mui-icon-list"></span>
+				<span class="mui-tab-label">任务大厅</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="javascript:void(0)" id="gerenzhongxin">
+				<span class="mui-icon mui-icon-person"></span>
+				<span class="mui-tab-label">个人中心</span>
+			</a>
+		</nav>
+		<script src="js/jquery-3.3.1.min.js"></script>
+		
+		<script>
+			var token=null;
+			var username=null;
+			
+			var ii=setTimeout(function(){
+			  token=plus.storage.getItem("token");
+			  $("#username").html(plus.storage.getItem("username"));
+			  $.get(base_url+"index.php/user/caiwuxinxi?token="+token,{},function(data){
+			  	$("#caiwuxinxi").html(data);
+			  });
+			  $.get(base_url+"index.php/user/headimg?token="+token,{},function(data){
+			  	$("#touxiang").attr("src",data);
+			  });
+			  $.get(base_url+"index.php/user/groupname?token="+token,{},function(data){
+			  	$("#groupname").html(data);
+			  });
+			  
+			  $.get(base_url+"index.php/user/info?token="+token,{},function(data){
+				$("#money").html(data.data.money);
+			});
+			$.get(base_url+"index.php/user/jmoney?token="+token,{},function(data){
+				$("#jmoney").html(data.data.money);
+			});
+			$.get(base_url+"index.php/user/zmoney?token="+token,{},function(data){
+				$("#zmoney").html(data.data.money);
+			});
+			  
+			  
+			  //document.getElementById("username").innerHTML=plus.storage.getItem("username");
+			  if(!token){
+			  	clearTimeout(ii);
+			  	location.href="login.html";
+			  }
+			 }, 500);
+			 
+			
+		</script>
+		
+		
+		<script>
+			document.getElementById("home").addEventListener("tap",function(){
+				location.href="index.html";
+			});
+			
+			document.getElementById("renwudating").addEventListener('tap', function() {
+//				var btnArray = ['取消', '确认'];
+//				mui.confirm('请先登录', '屏霸天下', btnArray, function(e) {
+//					if (e.index == 1) {
+//						mui.openWindow({
+//					    url: 'login.html', 
+//					    id:'login'
+//					  });
+//						return true;
+//					} else {
+//						return true;
+//					}
+//				})
+				location.href="task.html";
+			});
+			
+			document.getElementById("gerenzhongxin").addEventListener("tap",function(){
+				location.href="gerenzhongxin.html";
+			});
+			
+		</script>
+		
+		<script>
+			
+			document.getElementById("ziliao").addEventListener("tap",function(){
+				mui.openWindow({
+				    url: 'account.html', 
+				    id:'account'
+				  });
+			});
+			
+			document.getElementById("team").addEventListener("tap",function(){
+				mui.openWindow({
+				    url: 'team.html', 
+				    id:'team'
+				  });
+			});
+			
+			document.getElementById("bank").addEventListener("tap",function(){
+				mui.openWindow({
+				    url: 'bindbank.html', 
+				    id:'bindbank'
+				  });
+			});
+			
+			document.getElementById("qianbao").addEventListener("tap",function(){
+				mui.openWindow({
+				    url: 'money.html', 
+				    id:'money'
+				  });
+			});
+			
+			document.getElementById("tixian").addEventListener("tap",function(){
+				mui.openWindow({
+				    url: 'tixian.html', 
+				    id:'tixian'
+				  });
+			});
+			
+			
+			document.getElementById("logout").addEventListener("tap",function(){
+				plus.storage.clear();
+				
+				location.href="index.html";
+				
+			});
+			
+			
+			
+			
+		</script>
+</body>
+</html>

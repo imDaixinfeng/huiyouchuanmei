@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    
+    
+</head>
+<body>
+		
+        <div class="swiper-container">
+        <div class="swiper-wrapper" id="banner">
+            <div class="swiper-slide"><img src="images/banner/1.jpg"></div>
+            <div class="swiper-slide"><img src="images/banner/3.jpg"></div>            
+            <div class="swiper-slide"><img src="images/banner/4.jpg"></div>
+            <div class="swiper-slide"><img src="images/banner/5.jpg"></div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+		    <script src="js/swiper.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        paginationClickable: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: 2000,
+        autoplayDisableOnInteraction: false,
+		loop:true
+    });
+    </script>
+		<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="images/16.png" style="max-width:200px; height:16px;margin-top:2px;">
+						<div class="mui-media-body">
+							<p class="mui-ellipsis"><marquee><span id="tongzhi_1">汇友传媒升级通知！</span></marquee></p>
+						</div>
+					</a>
+				</li>
+
+			</ul>
+		
+		<div class="mui-content">
+		        <ul class="mui-table-view mui-grid-view mui-grid-9" style="background-color:#FFF;">
+                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0)" id="chengweivip">
+		                    <img src="images/icon_7.png" width="50%"></span>
+		                    <div class="mui-media-body">成为会员</div></a></li>
+                     <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0);" id="hongbao">
+		                    <img src="images/icon_6.png" width="50%"></span>
+		                    <div class="mui-media-body">会员说明</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0)" id="ruhezhuanyong">
+		                    <img src="images/icon_1.png" width="50%">
+		                    <div class="mui-media-body">如何赚佣</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0)" id="tuiguang">
+		                    <img src="images/icon_2.png" width="50%"></span>
+		                    <div class="mui-media-body">推广二维码</div></a></li>
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0);" id="tianxiacaifu">
+		                    <img src="images/icon_5.png" width="50%"></span>
+		                    <div class="mui-media-body">领取任务</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0)" id="guanggaotoufang">
+		                    <img src="images/icon_3.png" width="50%"></span>
+		                    <div class="mui-media-body">广告投放</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0);" id="jifenshop">
+		                    <img src="images/icon_4.png" width="50%"></span>
+		                    <div class="mui-media-body">产品商城</div></a></li>            
+		           
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0)" id="youxitianxia">
+		                    <img src="images/icon_8.png" width="50%"></span>
+		                    <div class="mui-media-body">游戏天下</div></a></li>
+		           <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="javascript:void(0)" id="kefuzhongxin">
+		                    <img src="images/icon_9.png" width="50%"></span>
+		                    <div class="mui-media-body">客服中心</div></a></li>
+		        </ul> 
+		</div>
+		
+		
+		
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="javascript:void(0)" id="home">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="javascript:void(0)" id="renwudating">
+				<span class="mui-icon mui-icon-list"></span>
+				<span class="mui-tab-label">任务大厅</span>
+			</a>
+			<a class="mui-tab-item" href="javascript:void(0)" id="gerenzhongxin">
+				<span class="mui-icon mui-icon-person"></span>
+				<span class="mui-tab-label">个人中心</span>
+			</a>
+		</nav>
+		
+		<script src="js/jquery-3.3.1.min.js"></script>
+		
+		<script>
+			document.getElementById("home").addEventListener("tap",function(){
+				location.href="index.html";
+			});
+			
+			document.getElementById("renwudating").addEventListener('tap', function() {
+//				var btnArray = ['取消', '确认'];
+//				mui.confirm('请先登录', '屏霸天下', btnArray, function(e) {
+//					if (e.index == 1) {
+//						mui.openWindow({
+//					    url: 'login.html', 
+//					    id:'login'
+//					  });
+//						return true;
+//					} else {
+//						return true;
+//					}
+//				})
+				location.href="task.html";
+			});
+			
+			document.getElementById("gerenzhongxin").addEventListener("tap",function(){
+				location.href="gerenzhongxin.html";
+			});
+			
+		</script>
+		
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
+			
+			var slider = mui("#slider");
+			slider.slider({
+				interval: 5000
+			});
+			
+			document.getElementById('tongzhi_1').addEventListener('tap', function() {
+			  mui.openWindow({
+			    url: 'gonggaoxiangqing.html', 
+			    id:'gonggaoxiangqing'
+			  });
+			});
+			
+			document.getElementById('ruhezhuanyong').addEventListener('tap', function() {
+			  mui.openWindow({
+			    url: 'ruhezhuanyongjin.html', 
+			    id:'ruhezhuanyong'
+			  });
+			});
+			
+			document.getElementById('tuiguang').addEventListener('tap', function() {
+			  var token=plus.storage.getItem("token");
+			  if(token){
+			  	mui.openWindow({
+				    url: 'tuiguangerweima.html', 
+				    id:'tuiguang'
+				  });
+			  }else{
+			  	location.href="login.html";
+			  }
+			  
+			});
+			
+			
+			document.getElementById('guanggaotoufang').addEventListener('tap', function() {
+			  mui.openWindow({
+			    url: 'guanggaotoufang.html', 
+			    id:'guanggaotoufang'
+			  });
+			});
+			
+			document.getElementById('jifenshop').addEventListener('tap', function() {
+//			  mui.openWindow({
+//			    url: 'http://www.2bibo.com', 
+//			    id:'jifenchangcheng'
+//			  });
+			  mui.toast('正在开发中');
+			});
+			
+			document.getElementById('tianxiacaifu').addEventListener('tap', function() {
+//			  mui.openWindow({
+//			    url: 'http://vip.posla.cn', 
+//			    id:'tianxiacaifu'
+//			  });
+			  location.href="task.html";
+			});
+			
+			document.getElementById('hongbao').addEventListener('tap', function() {
+			  mui.openWindow({
+			    url: 'hongbaoduoduo.html', 
+			    id:'hongbao'
+			  });
+			});
+			
+			document.getElementById('chengweivip').addEventListener('tap', function() {
+				var token=plus.storage.getItem("token");
+			  if(token){
+			  	mui.openWindow({
+				    url: 'chengweivip.html', 
+				    id:'chengweivip'
+				  });
+			  }else{
+			  	location.href="login.html";
+			  }
+			 
+			});
+			
+			document.getElementById('youxitianxia').addEventListener('tap', function() {
+			  mui.openWindow({
+			    url: 'youxitianxia.html', 
+			    id:'youxitianxia'
+			  });
+			});
+			
+			document.getElementById('kefuzhongxin').addEventListener('tap', function() {
+			  mui.openWindow({
+			    url: 'kefuzhongxin.html', 
+			    id:'kefuzhongxin'
+			  });
+			});
+			
+			mui.plusReady(function() {
+			    //首页返回键处理
+			    //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+			    var first = null;
+			    plus.key.addEventListener('backbutton', function(){
+			        //首次按键，提示‘再按一次退出应用’
+			        if(!first){
+			            first = new Date().getTime();
+			            mui.toast('再按一次退出应用');
+			            setTimeout(function(){
+			                first = null;
+			            },1000);
+			        }else{
+			            if(new Date().getTime()-first<1000){
+			                plus.runtime.quit();
+			            }
+			        }
+			    }, false);
+			});
+			
+			setTimeout(function(){
+				$.get(base_url+"index.php/fun/tongzhi",{},function(data){
+					$("#tongzhi_1").html(data);
+				});
+			},500);
+			
+			
+		
+			setTimeout(function(){
+				$.get(base_url+"index.php/index/banner",{},function(data){
+					$("#banner").html(data);
+				});
+			},500);
+		
+						
+		</script>
+</body>
+</html>

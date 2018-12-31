@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet" />
+    <script src="js/mui.view.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      	//mui.init();
+    </script>
+    
+    <style>
+    	.mui-page.mui-transitioning {
+    -webkit-transition: -webkit-transform 300ms ease;
+    transition: transform 300ms ease;
+}
+
+.mui-page-left {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.mui-ios .mui-page-left {
+    -webkit-transform: translate3d(-20%, 0, 0);
+    transform: translate3d(-20%, 0, 0);
+}
+
+.mui-navbar .mui-btn-nav {
+    -webkit-transition: none;
+    transition: none;
+    -webkit-transition-duration: .0s;
+    transition-duration: .0s;
+}
+
+.mui-navbar .mui-bar .mui-title {
+    display: inline-block;
+    width: auto;
+}
+
+.mui-page-shadow {
+    position: absolute;
+    right: 100%;
+    top: 0;
+    width: 16px;
+    height: 100%;
+    z-index: -1;
+    content: '';
+}
+
+.mui-page-shadow {
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+}
+
+.mui-navbar-inner.mui-transitioning,
+.mui-navbar-inner .mui-transitioning {
+    -webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.mui-page {
+    display: none;
+}
+
+.mui-pages .mui-page {
+    display: block;
+}
+.mui-page.mui-page-left{display: none;}
+    </style>
+</head>
+<body>
+	
+
+		<!--header部分-->
+	    <header id="header" class="mui-navbar-inner mui-bar mui-bar-nav " style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-back " style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">三级团队</h1>
+		</header>
+	    <!--内容区域-->
+	    <div class="mui-page-content">
+	    	
+	    	<div style="margin:44px 0 0 0;">
+	    		
+	    		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="overflow:visible;">
+					<div class="mui-scroll">
+						<!--数据列表-->
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" style="margin-top:44px;"></li>
+						</ul>
+					</div>
+				</div>
+				
+				<div style="padding-top:100px; text-align: center;">
+					<img src="images/nullData.png" width="150" id="ddd">
+					<p style="color:#666666;">没有数据</p>
+				</div>
+				
+			</div>
+	    	
+	    </div>
+	
+	
+		
+		<script src="js/jquery-3.3.1.min.js"></script>
+		
+		<script>
+			
+			
+			var token=null;
+			
+			setTimeout(function(){
+				token=plus.storage.getItem("token");
+				mui.init({
+					pullRefresh: {
+						container: '#pullrefresh',
+						up: {
+							auto:true,
+							contentrefresh: '正在加载...',
+							callback: pullupRefresh 
+						}
+					}
+				});
+				
+					
+			},500);
+			
+			
+			
+			
+			
+			
+			
+			var count = 1;
+			var pagetotal=1;
+			function pullupRefresh(){
+				setTimeout(function(){
+					
+					$.get(base_url+"index.php/user/level3?token="+token+"&p="+count,{},function(data){
+						$("#pullrefresh>.mui-scroll>.mui-table-view").append(data.data.html);
+						pagetotal=data.data.pagetotal;
+						//alert(pagetotal);
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > pagetotal));
+					});
+					
+				},1500);
+			}
+			
+			
+			
+		</script>
+		
+</body>
+</html>
