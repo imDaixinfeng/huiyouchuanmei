@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+	<head>
+		<base href="../../" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>汇友传媒</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			.vipDiv{
+				width:100%;
+				height:50px;
+				display:flex;
+				align-items:center;
+				justify-content:left;
+				background: white;
+			}
+			.vipImg{
+				width:25px;
+				height: auto;
+				margin-left: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">确认支付</h1>
+		</header>
+		<div class="mui-content">
+			<img src="images/banner/2.jpg" style="width:100%;">
+			<div class="vipDiv">
+				<img src="images/74.png" class="vipImg" />
+				<div style="margin-left: 10px;">
+					<font style="font-size: 0.9rem;">需支付：</font>
+					<font style="font-size: 0.9rem;color: red;" id="pay_money"></font>
+				</div>
+			</div>
+			<div style="height: 10px;"></div>
+			<div class="vipDiv" id="bankpay">
+				<img src="images/73.png" class="vipImg" />
+				<div style="margin-left: 10px;">
+					<font style="font-size: 0.9rem;">银行卡支付</font>
+				</div>
+				<img id="bankpay_ok" src="images/vipok.png" style="margin-left: 50%;width: 30px;display: none;" />
+			</div>
+			<div style="height: 10px;"></div>
+			<div class="vipDiv" id="alipay">
+				<img src="images/48.png" class="vipImg" />
+				<div style="margin-left: 10px;">
+					<font style="font-size: 0.9rem;">支付宝支付</font>
+				</div>
+				<img id="alipay_ok" src="images/vipok.png" style="margin-left: 50%;width: 30px;display: block;" />
+			</div>
+			<div style="height: 10px;"></div>
+			<div class="vipDiv" id="weixinpay">
+				<img src="images/103.png" class="vipImg" />
+				<div style="margin-left: 10px;">
+					<font style="font-size: 0.9rem;">微信支付</font>&nbsp;&nbsp;&nbsp;
+				</div>
+				<img id="weixinpay_ok" src="images/vipok.png" style="margin-left: 50%;width: 30px;display: none;" />
+			</div>
+			<form action="" method="post" id="payform" target="_self">
+				<input type="hidden" id="WIDbody" name="WIDbody" />
+				<input type="hidden" id="WIDsubject" name="WIDsubject" />
+				<input type="hidden" id="WIDout_trade_no" name="WIDout_trade_no" />
+				<input type="hidden" id="WIDtotal_amount" name="WIDtotal_amount" />
+			</form>
+			<button id="vipBtn" type="button" data-loading-text="支付中..." class="mui-btn mui-btn-red mui-btn-block" style="margin-top: 50px;">确认支付</button>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var levelId, token;
+			mui.plusReady(function() {
+				window.addEventListener('loadData', function(event) {
+					levelId = event.detail.levelId;
+					token = event.detail.token;
+					var username = plus.storage.getItem('username');
+					if (levelId == '1') {
+						document.getElementById('WIDbody').value = username + '升级普通VIP会员';
+						document.getElementById('WIDsubject').value = '普通VIP会员';
+					} else {
+						document.getElementById('WIDbody').value = username + '升级高级VIP会员';
+						document.getElementById('WIDsubject').value = '高级VIP会员';
+					}
+					document.getElementById('pay_money').innerText = event.detail.payMoneyText;
+					document.getElementById('payform').action = event.detail.payUrl;
+				});
+
+				mui('.mui-content').on('tap', '.vipDiv', function() {
+					if (this.id != 'alipay') {
+						mui.toast('支付渠道即将开通...')
+					}
+				});
+
+				mui(document.body).on('tap', '.mui-btn', function(e) {
+					var _self = this;
+					mui(_self).button('loading');
+					mui.ajax(base_url + "index.php/index/pay_ready", {
+						data: {
+							token: token,
+							levelId: levelId
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						success: function(data) {
+							mui(_self).button('reset');
+							if (data && data.status == '200') {
+								document.getElementById('WIDout_trade_no').value = data.order_id;
+								document.getElementById('WIDtotal_amount').value = '0.01';
+								document.getElementById('payform').submit();
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							mui(_self).button('reset');
+						}
+					});
+				});
+			});;
+		</script>
+	</body>
+
+</html>

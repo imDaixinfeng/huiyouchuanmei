@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<base href="../../" />
+		<title>公告详情</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body style="background-color:#FFF;">
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">公告详情</h1>
+		</header>
+		<div class="mui-content" style="background-color:#FFF;padding-left: 10px;padding-right: 10px;">
+			<p>
+				<h3 id="title" class="mui-text-center"></h3>
+			</p>
+			<p>
+				<h5 id="addtime" class="mui-text-right"></h5>
+			</p>
+			<p>
+				<hr />
+			</p>
+			<p>
+				<h5 id="content"></h5>
+			</p>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			window.addEventListener('loadData', function(event) {
+				document.getElementById('title').innerHTML = '';
+				document.getElementById('content').innerHTML = '';
+				document.getElementById('addtime').innerHTML = '';
+				mui.scrollTo(0,1);//返回之前将页面重新定位到顶部
+				var id = event.detail.id;
+				mui.ajax(base_url+'index.php/index/noticeDetail', {
+					data: {
+						id: id
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 1000,
+					success: function(data) {
+						console.log(data);
+						if (data) {
+							document.getElementById('title').innerHTML = data.title;
+							document.getElementById('content').innerHTML = data.content;
+							document.getElementById('addtime').innerHTML = data.addtime;
+						}
+					},
+					error: function(e) {
+						console.log(e);
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

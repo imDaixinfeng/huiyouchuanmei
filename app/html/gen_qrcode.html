@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>汇友传媒</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body style="background-color: #FFF;">
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">推广二维码</h1>
+		</header>
+
+		<div id="content" class="mui-content" style="background-color: #FFF;">
+		</div>
+		<h6 style="color: red;margin-left: 8px;">长按保存到手机相册，然后转发到朋友圈</h6>
+		<script src="js/mui.min.js"></script>
+		<script src="js/downloadImage.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function () {
+			    mui.ajax(base_url + "index.php/index/tuiguang", {
+			    	data: {
+			    		token: plus.storage.getItem('token')
+			    	},
+			    	type: 'get', //HTTP请求类型
+			    	success: function(data) {
+			    		document.getElementById('content').innerHTML = data;
+			    	}
+			    });
+				
+				mui.back=function () {
+				    plus.webview.currentWebview().hide();	
+				}
+			});
+			
+		</script>
+	</body>
+
+</html>

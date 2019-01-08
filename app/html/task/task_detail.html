@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<base href="../../" />
+		<title>汇友传媒</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/mui.showLoading.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">提交任务</h1>
+		</header>
+		<div style="height:8px;"></div>
+		<div style="margin:44px 0 0 0;">
+			<div style="margin:15px; line-height:2.5rem; font-size:0.98rem;">
+				<div>
+					1.提交的任务：<b id="ads_title"></b>
+				</div>
+
+				<div>
+					2.截取朋友圈图片并上传：
+				</div>
+
+				<div style="margin-top:15px;" id="imageDiv">
+				</div>
+				<div id="chooseImgBtnDiv">
+					<button type="button" class="mui-btn mui-btn-danger" id="chooseImgBtn">请选择图片</button>
+				</div>
+
+				<div id="load">
+					<input type="hidden" name="image_data" id="image_data" value="" />
+					<input type="hidden" name="taskId" id="taskId" value="" />
+					<div id="submitBtnDiv" style="display: none;">
+						<button id="submitBtn" type="button" class="mui-btn mui-btn-danger mui-btn-block">提交任务</button>
+					</div>
+				</div>
+
+			</div>
+			<div style="height:8px;"></div>
+
+			<div style="margin:15px;" id="guize">
+
+				<p>任务领取规则：</p>
+				<p>1、VIP会员可领取每天2条朋友圈发布任务。</p>
+				<p>2、发布任务时必须与平台内的文案与图片一致【个人邀请好友海报+产品图】</p>
+				<p>3、不得屏蔽微信好友查看您的朋友圈。</p>
+				<p>4、上传图片必须是朋友圈全屏截图。</p>
+
+				<img src="images/34.jpg" style="width:100%;">
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.showLoading.js"></script>
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript">
+			var levelId, taskId, token;
+			mui.init({
+				beforeback: function() {
+					var tasklist = plus.webview.getWebviewById('task_list');
+					if (tasklist) {
+						mui.fire(tasklist, 'loadData', {
+							levelId: levelId,
+							token: token
+						});
+					}
+					return true;
+				}
+			});
+
+			mui.plusReady(function() {
+				window.addEventListener('loadData', function(event) {
+					resetPage();
+					levelId = event.detail.levelId;
+					taskId = event.detail.taskId;
+					token = event.detail.token;
+					mui.ajax(base_url + 'index.php/ad/task_detail', {
+						data: {
+							taskId: taskId,
+							token: token
+						},
+						dataType: 'json',
+						type: 'get',
+						success: function(data) {
+							if (data && !data.error) {
+								document.getElementById('ads_title').innerText = data.data.title;
+								document.getElementById('taskId').value = taskId;
+							} else {
+								mui.alert('请检查您的网络连接是否正常！');
+							}
+						}
+					});
+				});
+
+				document.getElementById("chooseImgBtn").addEventListener("tap", function() {
+					plus.gallery.pick(function(path) {
+						getBase64(path)
+							.then(function(base64) {
+								document.getElementById('chooseImgBtnDiv').style.display = "none";
+								document.getElementById('imageDiv').innerHTML = '<img src="' + base64 + '" style="max-width:100%;">';
+								document.getElementById('image_data').value = base64;
+								document.getElementById('submitBtnDiv').style.display = "block";
+								console.log(base64);
+							}, function(err) {
+								console.log(err);
+							});
+
+					}, function(e) {
+						console.log("取消选择图片");
+					}, {
+						filter: "image"
+					});
+				});
+
+				document.getElementById('submitBtn').addEventListener('tap', function() {
+					mui.showLoading("正在提交..");
+					this.disabled = true;
+					var image_data = document.getElementById('image_data').value;
+					mui.ajax(base_url + 'index.php/ad/upload_task', {
+						data: {
+							taskId: taskId,
+							token: token,
+							image_data: image_data
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						success: function(data) {
+							mui.hideLoading();
+							if (data && data.status == 200) {
+								mui.alert(data.error);
+							} else {
+								mui.alert('请检查您的网络连接是否正常！');
+								this.disabled = false;
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.hideLoading();
+							mui.alert('请检查您的网络连接是否正常！');
+							this.disabled = false;
+						}
+					});
+				});
+			});
+			
+			function resetPage () {
+				document.getElementById('ads_title').innerText = '';
+				document.getElementById('imageDiv').innerHTML = '';
+				document.getElementById('chooseImgBtnDiv').style.display = "block";
+				document.getElementById('image_data').value = '';
+				document.getElementById('taskId').value = '';
+				document.getElementById('submitBtnDiv').style.display = "none";
+				document.getElementById('submitBtn').disabled = false;
+				mui.scrollTo(0,1);//返回之前将页面重新定位到顶部
+			}
+
+			function getBase64(img) { //传入图片路径，返回base64
+				function getBase64Image(img, width, height) { //width、height调用时传入具体像素值，控制大小 ,不传则默认图像大小
+					var canvas = document.createElement("canvas");
+					var img_width = img.width;
+					var img_height = img.height;
+					var canvas_width = 300;
+					var canvas_height = parseInt(canvas_width * img_height / img_width);
+					//alert(canvas_height);
+					canvas.width = canvas_width;
+					canvas.height = canvas_height;
+
+					var ctx = canvas.getContext("2d");
+					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+					var dataURL = canvas.toDataURL();
+					return dataURL;
+				}
+				var image = new Image();
+				image.crossOrigin = '';
+				image.src = img;
+				var deferred = $.Deferred();
+				if (img) {
+					image.onload = function() {
+						deferred.resolve(getBase64Image(image)); //将base64传给done上传处理
+					}
+					return deferred.promise(); //问题要让onload完成后再return sessionStorage['imgTest']
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<base href="../../" />
+		<title>公告列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">公告列表</h1>
+		</header>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view">
+					<!-- <li class="mui-table-view-cell">
+						 <div class="mui-h4 mui-ellipsis-2">Hi，李明明，申请交行信息卡，100元等你拿，李明明，申请交行信息卡，100元等你拿，</div>
+						 <div class="mui-h6 mui-text-right">2015-12-30 12:12:12</div>
+					</li>
+					<li class="mui-table-view-cell">
+						 <div class="mui-h4 mui-ellipsis-2">Hi，李明明，申请交行信息卡，100元等你拿，</div>
+						 <div class="mui-h6 mui-text-right">2015-12-30 12:12:12</div>
+					</li> -->
+				</ul>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						style: 'circle',
+						callback: pulldownRefresh
+					},
+					up: {
+						auto: true,
+						callback: pullupRefresh
+					}
+				}
+			});
+
+			var detailPage = null;
+			mui.plusReady(function() {
+				//initData();
+				detailPage = plus.webview.getWebviewById('notice_detail');
+				if (!detailPage) {
+					detailPage = mui.preload({
+						url: 'notice_detail.html',
+						id: 'notice_detail',
+						styles : {
+							scrollIndicator : 'none'
+						}
+					});
+				}
+			});
+
+			function initData() {
+				var table = document.body.querySelector('.mui-table-view');
+				mui.ajax(base_url+'index.php/index/noticeList', {
+					data: {
+						addtime: Date.parse(new Date()) / 1000,
+						type: '2'
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 2000, //超时时间设置为2秒
+					success: function(data) {
+						console.log(data);
+						if (data.length > 0) {
+							for (var i = 0; i < data.length; i++) {
+								var item = data[i];
+								//通过getItemElement函数将数据转换为可插入的Element元素
+								table.appendChild(getItemElement(item));
+							}
+						}
+					},
+					error: function(e) {
+						mui.toast("加载出错");
+					}
+				});
+			}
+
+			function pullupRefresh() {
+				var table = document.body.querySelector('.mui-table-view');
+				var last = table.querySelector('li:last-child');
+				var addtime = last != null ? last.getAttribute('data-id') : Date.parse(new Date()) / 1000;
+				var _self = this;
+				mui.ajax(base_url+'index.php/index/noticeList', {
+					data: {
+						addtime: addtime,
+						type: '2'
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 2000, //超时时间设置为2秒
+					success: function(data) {
+						console.log(data);
+						for (var i = 0; i < data.length; i++) {
+							var item = data[i];
+							//通过getItemElement函数将数据转换为可插入的Element元素
+							table.appendChild(getItemElement(item));
+						}
+						//如果列表为空，表示以前的产品加载完了
+						_self.endPullupToRefresh(data.length == 0);
+					},
+					error: function(e) {
+						mui.toast("加载出错，请稍候尝试...");
+						_self.endPullupToRefresh(false);
+					}
+				});
+			}
+
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				var table = document.body.querySelector('.mui-table-view');
+				var last = table.querySelector('li:first-child');
+				var addtime = last != null ? last.getAttribute('data-id') : Date.parse(new Date()) / 1000;
+				mui.ajax(base_url+'index.php/index/noticeList', {
+					data: {
+						addtime: addtime,
+						type: '1'
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 2000, //超时时间设置为2秒
+					success: function(data) {
+						console.log(data);
+						if (data.length > 1) { //从第二条开始,防止重复加载第一条
+							for (var i = 1; i <= data.length; i++) {
+								var item = data[i];
+								table.insertBefore(getItemElement(item), table.firstChild);
+							}
+						}
+						mui('#pullrefresh').pullRefresh().endPulldown(data.length == 0);
+					},
+					error: function(e) {
+						mui.toast("加载出错，请稍候尝试...");
+						mui('#pullrefresh').pullRefresh().endPulldown(false);
+					}
+				});
+			}
+
+			var itemHtmlOri = ['<li class="mui-table-view-cell" data-id="{addtime}">',
+				'<a href="javascript:void(0);" onclick="showDetail({id})">',
+				'<div class="mui-h4 mui-ellipsis-2">',
+				'{title}',
+				'</div>',
+				'<div class="mui-h6 mui-text-right">',
+				'{addtime_}',
+				'</div>',
+				'</a>',
+				'</li>'
+			].join('');
+
+			function getItemElement(item) {
+				var box = document.createElement('div');
+				var itemHtml = itemHtmlOri;
+				itemHtml = itemHtml.replace(/{addtime}/g, item.addtime)
+					.replace(/{id}/g, item.id)
+					.replace(/{title}/g, item.title)
+					.replace(/{addtime_}/g, item.addtime_);
+				box.innerHTML = itemHtml;
+				return box.firstChild;
+			}
+
+			function showDetail(id) {
+				mui.fire(detailPage, 'loadData', {
+					id: id
+				});
+				detailPage.show();
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>汇友传媒</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-icon-eye{ color:#FFFFFF;}
+			#mobile::-webkit-input-placeholder{color: #FFFFFF;}
+			#password::-webkit-input-placeholder{color: #FFFFFF;}
+		</style>
+	</head>
+	<body style="background-color:#fe434e;">
+		<header id="header" class="mui-bar mui-bar-transparent">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">登录</h1>
+		</header>
+		<div style="text-align: center;">
+			<img src="images/logo_login.png" style="width:50%;margin-top:50px;">
+		</div>
+		<div style="width: 80%;margin:0 auto;">
+			<form id="myform">
+				<div class="mui-input-row">
+					<span class="mui-icon mui-icon-person" style="color:#FFF; position: absolute; left:10px; top:5px;"></span>
+					<input id="mobile" type="number" name="username" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;"
+					 placeholder="手机号">
+				</div>
+				<div class="mui-input-row mui-password">
+					<span class="mui-icon mui-icon-locked" style="color:#FFF; position: absolute; left:10px; top:5px;"></span>
+					<input id="password" type="password" name="password" class="mui-input-password" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;"
+					 placeholder="密码">
+				</div>
+				<button type="button" id="submit" class="mui-btn mui-btn-block mui-btn-outlined" style="border:0; border-radius:30px; background-color:#FFF;">登录</button>
+			</form>
+			<a href="javascript:void(0)" id="reg" style="color:#FFF;">立即注册</a>
+			<a href="javascript:void(0)" id="findPwd" style="color:#FFF; float:right;">找回密码</a>
+		</div>
+
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+
+			mui.plusReady(function() {
+				document.getElementById("submit").addEventListener("tap", function() {
+					var username = document.getElementById("mobile").value;
+					var password = document.getElementById("password").value;
+
+					if (!username) {
+						mui.toast('手机号不能为空！');
+						return;
+					}
+
+					if (!password) {
+						mui.toast('密码不能为空！');
+						return;
+					}
+
+					mui.ajax(base_url + 'index.php/login/userlogin', {
+						data: {
+							username: username,
+							password: password
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						success: function(data) {
+							mui.alert(data.error, '登录提示', function() {
+								if (data && data.status == 200) {
+									plus.storage.setItem('token', data.data.token);
+									plus.storage.setItem('username', data.data.username);
+									var userCenterPage = plus.webview.getWebviewById('user_center');
+									mui.fire(userCenterPage, 'loadData', {
+										token: data.data.token
+									});
+									mui.back();
+								}
+							});
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.alert('请检查您的网络连接是否正常！');
+						}
+					});
+				});
+
+				document.getElementById("reg").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "reg.html",
+						id: "reg"
+					});
+				});
+
+				document.getElementById("findPwd").addEventListener("tap", function() {
+					location.href = base_url + "index.php/fun/zhaohuimima";
+				});
+			})
+		</script>
+	</body>
+</html>

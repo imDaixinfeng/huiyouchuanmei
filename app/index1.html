@@ -13,142 +13,181 @@
 	<body>
 
 		<nav class="mui-bar mui-bar-tab">
-			<a class="mui-tab-item mui-active" data-id="home">
+			<a class="mui-tab-item mui-active" data-id=0>
 				<span class="mui-icon mui-icon-home"></span>
 				<span class="mui-tab-label">首页</span>
 			</a>
-			<a class="mui-tab-item" id="1" data-id="task_center">
+			<a class="mui-tab-item" data-id=1>
 				<span class="mui-icon mui-icon-list"></span>
 				<span class="mui-tab-label">任务大厅</span>
 			</a>
-			<a class="mui-tab-item" id="2" data-id="user_center">
+			<a class="mui-tab-item" data-id=2>
 				<span class="mui-icon mui-icon-person"></span>
 				<span class="mui-tab-label">个人中心</span>
 			</a>
 		</nav>
 
 		<script src="js/mui.min.js"></script>
-		<script src="js/util.js"></script>
 		<script type="text/javascript">
-			(function() {
-				mui.init({
-					swipeBack: true //启用右滑关闭功能
+			mui.init();
+
+			mui.plusReady(function() {
+				//设置默认打开首页显示的子页序号
+				var index = 0;
+				//把子页面路径写在数组里面
+				//要切换的子页面
+				var subPages = [{
+					url: 'html/home.html',
+					id: 'home'
+				}, {
+					url: 'html/ads/ads_center.html',
+					id: 'ads_center',
+				}, {
+					url: 'html/user/user_center.html',
+					id: 'user_center'
+				}];
+				//获取当前页面所属的Webview窗口对象
+				var self = plus.webview.currentWebview();
+				for (var i = 0; i < 3; i++) {
+					//创建webview子页
+					var sub = plus.webview.create(
+						subPages[i].url, //子页url
+						subPages[i].id, //子页id
+						{
+							top: '0px',
+							bottom: '51px',
+							scrollIndicator: "none"
+						}
+					);
+					//如果不是我们设置的子页就隐藏
+					if (i != index) {
+						sub.hide()
+					}
+					//将webview对象填充到窗口
+					self.append(sub);
+				}
+
+				//当前激活选项
+				var activeTab = subPages[index].id;
+				var targetTab;
+				mui('.mui-bar').on('tap', '.mui-tab-item', function(e) {
+					//获取子页面的id
+					var id = this.getAttribute('data-id');
+					targetTab = subPages[id].id;
+					if (activeTab == targetTab) {
+						return false;
+					}
+					//隐藏当前选项卡
+					plus.webview.hide(activeTab);
+					//更改当前活跃选项卡
+					activeTab = targetTab;
+					
+					if (targetTab == 'user_center') {
+						var token = plus.storage.getItem('token');
+						if (!token) {
+							mui.openWindow('html/login.html', 'login', {});
+						} else {
+							var userCenterPage = plus.webview.getWebviewById('user_center');
+							mui.fire(userCenterPage, 'loadData', {
+								token: token
+							});
+						}
+					}
+					//显示目标选项卡
+					plus.webview.show(targetTab, 'slide-in-right');
 				});
 
-				mui.plusReady(function() {
-					//要切换的子页面
-					/* var subpages = [
-						'home.html',
-						'task_center.html',
-						'user_center.html'
-					]; */
-					/* //设置默认打开首页显示的子页序号
-					var Index = 0;
-					//把子页面路径写在数组里面
-					//var subpages = ['home.html', 'hotspot.html', 'experience.html', 'news.html', 'mine.html']
-					//获取当前页面所属的Webview窗口对象
-					var self = plus.webview.currentWebview();
-					for (var i = 0; i < 5; i++) {
-						//创建webview子页
-						var sub = plus.webview.create(
-							subpages[i], //子页url
-							subpages[i], //子页id
-							{
-								top: '0px',
-								bottom: '44px',
-								scrollIndicator: "none" //隐藏滚动条
-							}
-						);
-						//如果不是我们设置的子页就隐藏
-						if (i != Index) {
-							sub.hide()
+				mui.back = function(event) {
+					mui.confirm('确定要离开汇友传媒APP吗？', '退出提示', ['确定', '取消'], function(e) {
+						if (e.index == 0) {
+							plus.runtime.quit();
 						}
-						//将webview对象填充到窗口
-						self.append(sub)
+					});
+					return false;
+				};
+
+				// 获取本地应用资源版本号
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					var wgtVer = inf.version; //本地资源版本号
+					checkUpdate(wgtVer);
+				});
+
+			});
+
+			function checkUpdate(wgtVer) {
+				mui.ajax(base_url + 'index.php/index/checkUpdate', {
+					dataType: 'text', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 20000, //超时时间设置为20秒
+					success: function(newVer) {
+						if (wgtVer != newVer) {
+							mui.alert('发现新资源文件，需要更新！', '检查更新', function() {
+								downWgt(); // 下载升级包
+							});
+						}
 					}
+				});
+			}
 
-					//当前激活选项
-					var activeTab = subpages[Index]
-					var targetTab;
-					mui('.mui-bar-tab').on('tap', 'a', function(e) {
-						//获取子页面的id
-						var j = this.getAttribute('id')
-						targetTab = subpages[j]
-						if (activeTab == targetTab) {
-							return
-						}
-						//显示目标选项卡
-						plus.webview.show(targetTab)
-						//隐藏当前选项卡
-						plus.webview.hide(activeTab)
-						//更改当前活跃选项卡
-						activeTab = targetTab
-					}) */
-					var subPages = [{
-						url: 'home.html',
-						id: 'home'
-					}, {
-						url: 'task_center.html',
-						id: 'task_center',
-					}, {
-						url: 'user_center.html',
-						id: 'user_center'
-					}];
-					var subStyles = {
-						top: '0px',
-						bottom: '51px'
-					};
+			var wgtWaiting = null;
 
-					var aniShow = {};
-					var _selfWv = plus.webview.currentWebview();
-					var _secondWv = plus.webview.getSecondWebview();
-					_selfWv.append(_secondWv);
-					//当前激活选项
-					var activeTab = subPages[0].id;
-					var getSubInfoById = function(infoList, id) {
-						var result = null;
-						for (var i = 0, len = infoList.length; i < len; i++) {
-							var _info = infoList[i];
-							if (_info.id === id) {
-								result = _info;
-								break;
-							}
-						}
-						return result;
-					};
-					//选项卡点击事件
-					mui('.mui-bar-tab').on('tap', 'a', function(e) {
-						var targetTab = this.getAttribute('data-id');
+			function downWgt() {
+				wgtWaiting = plus.nativeUI.showWaiting("开始下载...");
+				var wgtUrl = "http://www.cnsuqi.com/update/H5C862819.wgt";
+				var task = plus.downloader.createDownload(wgtUrl, {
+					filename: "_doc/update/"
+				}, function(download, status) {
+					if (status == 200) {
+						console.log(download.filename + '下载完成');
+						wgtWaiting.setTitle("开始安装...");
+						installWgt(download.filename);
+					} else {
+						mui.alert("请检查您的网络连接是否正常！", '更新失败');
+						wgtWaiting.close();
+					}
+				});
 
-						if (targetTab == activeTab) {
-							return;
-						}
-						//显示目标选项卡
-						//若为iOS平台或非首次显示，则直接显示
-						var _subWv = plus.webview.getWebviewById(targetTab);
-						if (!_subWv) {
-							var _subInfo = getSubInfoById(subPages, targetTab);
-							_subWv = plus.webview.create(_subInfo.url, _subInfo.id, subStyles);
-							_selfWv.append(_subWv);
-						}
-						if (mui.os.ios || aniShow[targetTab]) {
-							_subWv.show();
-						} else {
-							//否则，使用fade-in动画，且保存变量
-							var temp = {};
-							temp[targetTab] = "true";
-							mui.extend(aniShow, temp);
-							_subWv.show(
-							"fade-in", 300);
-						}
-						//隐藏当前;
-						plus.webview.hide(activeTab);
-						//更改当前活跃的选项卡
-						activeTab = targetTab;
+				task.addEventListener("statechanged", function(download, status) {
+					switch (download.state) {
+						case 2:
+							wgtWaiting.setTitle("已连接到服务器...");
+							break;
+						case 3:
+							var percent = download.downloadedSize / download.totalSize * 100;
+							wgtWaiting.setTitle("已下载 " + parseInt(percent) + "%");
+							break;
+						case 4:
+							wgtWaiting.setTitle("下载完成！");
+							break;
+					}
+				});
+				task.start();
+			};
+
+			function installWgt(wgtpath) {
+				plus.runtime.install(wgtpath, {}, function(success) {
+					wgtWaiting.close();
+					delWgtFile(wgtpath);
+					//ios 安卓最好不要提示
+					//mui.alert("应用资源更新完成！", '更新完成', function() {
+					plus.runtime.restart();
+					//});
+				}, function(error) {
+					wgtWaiting.close();
+					delWgtFile(wgtpath);
+					mui.alert("应用更新失败，请下载最新版APP直接安装！", '更新失败');
+				});
+			};
+
+			function delWgtFile() {
+				plus.io.resolveLocalFileSystemURL('_doc/update/', function(entry) {
+					entry.removeRecursively(function(entry) {
+						console.log("Remove succeeded");
+					}, function(e) {
+						console.log("清除缓存文件失败[" + e.code + "]：" + e.message);
 					});
 				});
-
-			})();
+			}
 		</script>
 
 

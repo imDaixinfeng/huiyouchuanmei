@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>汇友传媒</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/icons-extra.css" rel="stylesheet" />
+		<link href="css/swiper.min.css" rel="stylesheet">
+		<style type="text/css">
+			#noticeul::after {
+				display: none;
+			}
+
+			#noticeul::before {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body style="background-color:#FFF;">
+
+		<div class="mui-content" style="background-color:#FFF;">
+			<!-- <div id="imageSlider" class="mui-slider">
+			</div> -->
+			<div class="swiper-container">
+				<div class="swiper-wrapper" id="banner">
+					<div class="swiper-slide"><img src="images/banner/1.jpg"></div>
+					<div class="swiper-slide"><img src="images/banner/3.jpg"></div>
+					<div class="swiper-slide"><img src="images/banner/4.jpg"></div>
+					<div class="swiper-slide"><img src="images/banner/5.jpg"></div>
+				</div>
+				<!-- Add Pagination -->
+				<div class="swiper-pagination"></div>
+			</div>
+			<ul class="mui-table-view" id="noticeul">
+				<li class="mui-table-view-cell mui-media">
+					<img class="mui-media-object mui-pull-left" src="images/16.png" style="max-width:200px; height:16px;margin-top:2px;">
+					<div class="mui-media-body">
+						<p class="mui-ellipsis">
+							<marquee><span id="notice"></span></marquee>
+						</p>
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-grid-view mui-grid-9" style="background-color:#FFF;">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="how_play" url="how_play.html">
+					<img src="images/icon_1.png" width="50%">
+					<div class="mui-media-body">如何赚佣</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="go_vip" url="vip/go_vip.html">
+					<img src="images/icon_7.png" width="50%"></img>
+					<div class="mui-media-body">成为会员</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="gen_qrcode" url="gen_qrcode.html">
+					<img src="images/icon_2.png" width="50%"></img>
+					<div class="mui-media-body">推广二维码</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="ads_type" url="ads/ads_type.html">
+					<img src="images/icon_5.png" width="50%"></img>
+					<div class="mui-media-body">领取任务</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="ads_add" url="ads/ads_add.html">
+					<img src="images/icon_10.png" width="50%"></img>
+					<div class="mui-media-body">发布任务</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="ads_pub" url="ads/ads_pub.html">
+					<img src="images/icon_3.png" width="50%"></img>
+					<div class="mui-media-body">广告投放</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="hy_shop" url="hy_shop.html">
+					<img src="images/icon_4.png" width="50%"></img>
+					<div class="mui-media-body">汇友商城</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="game_center" url="game_center.html">
+					<img src="images/icon_8.png" width="50%"></img>
+					<div class="mui-media-body">游戏天下</div>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="kf_center" url="kf_center.html">
+					<img src="images/icon_9.png" width="50%"></img>
+					<div class="mui-media-body">客服中心</div>
+				</li>
+			</ul>
+		</div>
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/swiper.min.js"></script>
+		<script type="text/javascript">
+			var swiper = new Swiper('.swiper-container', {
+				pagination: '.swiper-pagination',
+				nextButton: '.swiper-button-next',
+				prevButton: '.swiper-button-prev',
+				paginationClickable: true,
+				spaceBetween: 30,
+				centeredSlides: true,
+				autoplay: 2000,
+				autoplayDisableOnInteraction: false,
+				loop: true
+			});
+			var preloadPages = [{
+				url: 'notice/notice_list.html',
+				id: 'notice_list'
+			}, {
+				url: 'how_play.html',
+				id: 'how_play'
+			}, {
+				url: 'ads/ads_type.html',
+				id: 'ads_type'
+			}, {
+				url: 'vip/go_vip.html',
+				id: 'go_vip'
+			}, {
+				url: 'ads/ads_pub.html',
+				id: 'ads_pub'
+			}, {
+				url: 'kf_center.html',
+				id: 'kf_center'
+			}];
+			mui.init();
+
+			mui.plusReady(function() {
+				mui.each(preloadPages, function(index, item) {
+					mui.preload({
+						url: item.url,
+						id: item.id,
+						styles: {
+							scrollIndicator: 'none'
+						}
+					});
+				})
+				var noticeDetailPage = mui.preload({
+					url: 'notice/notice_detail.html',
+					id: 'notice_detail',
+					styles: {
+						scrollIndicator: 'none'
+					}
+				});
+
+				mui(".mui-grid-9").on('tap', '.mui-table-view-cell', function() {
+					var id = this.getAttribute("id");
+					var url = this.getAttribute("url");
+					if (id == 'ads_add' || id == 'hy_shop' || id == 'game_center') {
+						mui.toast('即将上线...');
+						return;
+					}
+
+					if (id == 'gen_qrcode') {
+						var token = plus.storage.getItem("token");
+						if (!token) {
+							mui.openWindow('login.html','login',{});
+							return;
+						}
+					}
+					
+					if (id == 'go_vip') {
+						var token = plus.storage.getItem("token");
+						if (!token) {
+							mui.openWindow('login.html','login',{});
+							return;
+						} else {
+							var govipPage = plus.webview.getWebviewById('go_vip');
+							mui.fire(govipPage,'loadData',{token:token})
+						}
+					}
+
+					mui.openWindow({
+						url: url,
+						id: id
+					});
+				});
+
+				document.getElementById('noticeul').addEventListener('tap', function() {
+					mui.openWindow({
+						url: 'notice/notice_list.html',
+						id: 'notice_list'
+					});
+				});
+
+				//initBanner();
+				initNotice(noticeDetailPage);
+			});
+
+			function initNotice() {
+				var notice = document.getElementById('notice');
+				var addtime = plus.storage.getItem('notice_addtime');
+				addtime = addtime == null ? Date.parse(new Date()) / 1000 : addtime;
+				mui.ajax(base_url + 'index.php/index/noticeList', {
+					data: {
+						addtime: addtime,
+						type: '1'
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 2000, //超时时间设置为2秒
+					success: function(data) {
+						if (data.length > 0) {
+							notice.innerText = data[0].title;
+							plus.storage.setItem('notice_addtime', data[0].addtime);
+							if (data.length > 1) { //说明有最新的公告,弹出是否查看对话框
+								mui.confirm(data[0].title, '最新公告', ['查看', '取消'], function(e) {
+									if (e.index == 0) {
+										mui.fire(noticeDetailPage, 'loadData', {
+											id: data[0].id
+										});
+										noticeDetailPage.show();
+									}
+								});
+							}
+
+						}
+					}
+				});
+			}
+
+			function initBanner() {
+				mui.ajax(base_url + 'index.php/index/banner1', {
+					dataType: 'json',
+					type: 'get',
+					timeout: 2000,
+					success: function(data) {
+						console.log(data);
+						setMarquee(data);
+					}
+				});
+			}
+
+			function setMarquee(imageList) {
+				var sliderMarquee = document.getElementById('imageSlider');
+				var sliderGroup = document.createElement('div');
+				sliderGroup.className = 'mui-slider-group mui-slider-loop';
+				sliderMarquee.appendChild(sliderGroup);
+				var sliderIndicator = document.createElement('div');
+				sliderIndicator.className = 'mui-slider-indicator';
+				sliderMarquee.appendChild(sliderIndicator);
+				for (var i = 0; i < imageList.length; i++) {
+					if (0 == i) {
+						var sliderItemDuplicate = document.createElement('div');
+						sliderItemDuplicate.className = 'mui-slider-item mui-slider-item-duplicate';
+						sliderItemDuplicate.innerHTML = '<a href="' + imageList[imageList.length - 1].id +
+							'">\<img src="' + imageList[imageList.length - 1].imagePath + '" />\</a>';
+						sliderGroup.appendChild(sliderItemDuplicate);
+					}
+					var sliderItem = document.createElement('div');
+					sliderItem.className = 'mui-slider-item';
+					sliderItem.innerHTML = '<a href="' + imageList[i].id + '">\<img src="' + imageList[i].imagePath + '" />\</a>';
+					sliderGroup.appendChild(sliderItem);
+					var indicatorItme = document.createElement('div');
+					if (i == 0) {
+						indicatorItme.className = 'mui-indicator mui-active';
+					} else {
+						indicatorItme.className = 'mui-indicator';
+					}
+					sliderIndicator.appendChild(indicatorItme);
+					if (imageList.length - 1 == i) {
+						var sliderItemDuplicate = document.createElement('div');
+						sliderItemDuplicate.className = 'mui-slider-item mui-slider-item-duplicate';
+						sliderItemDuplicate.innerHTML = '<a href="' + imageList[0].id + '">\<img src="' + imageList[0].imagePath +
+							'" />\</a>';
+						sliderGroup.appendChild(sliderItemDuplicate);
+					}
+				}
+				mui('.mui-slider').slider({
+					interval: 2000
+				});
+			}
+		</script>
+
+
+	</body>
+
+</html>

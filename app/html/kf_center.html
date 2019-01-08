@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+	<head>
+		<base href="../" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>汇友传媒</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">客服中心</h1>
+		</header>
+		<div class="mui-content">
+			<img src="images/kefu_bng.png" style="width: 100%;">
+			<div id="content" style="margin-top: 20px;"></div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			mui.ajax(base_url + "index.php/index/kf_center", {
+				type: 'get', //HTTP请求类型
+				success: function(data) {
+					document.getElementById('content').innerHTML = data;
+					mui(".mui-table-view").on('tap','.mui-table-view-cell',function(){
+						var phone = this.children[0].innerText;
+						if (phone.length == 11) {
+							mui.confirm('是否需要拨打咨询热线？','提示',['拨打','取消'],function(e){
+								if(e.index == 0){
+									plus.device.dial(phone,false);
+								}
+							});
+						}
+					});
+				}
+			});
+		</script>
+	</body>
+
+</html>
