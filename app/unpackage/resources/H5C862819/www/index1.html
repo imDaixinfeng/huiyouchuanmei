@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>汇友传媒</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" data-id=0>
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" data-id=1>
+				<span class="mui-icon mui-icon-list"></span>
+				<span class="mui-tab-label">任务大厅</span>
+			</a>
+			<a class="mui-tab-item" data-id=2>
+				<span class="mui-icon mui-icon-person"></span>
+				<span class="mui-tab-label">个人中心</span>
+			</a>
+		</nav>
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/checkUpdate.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			mui.plusReady(function() {
+				//设置默认打开首页显示的子页序号
+				var index = 0;
+				//把子页面路径写在数组里面
+				//要切换的子页面
+				var subPages = [{
+					url: 'html/home.html',
+					id: 'home'
+				}, {
+					url: 'html/ads/ads_center.html',
+					id: 'ads_center',
+				}, {
+					url: 'html/user/user_center.html',
+					id: 'user_center'
+				}];
+				//获取当前页面所属的Webview窗口对象
+				var self = plus.webview.currentWebview();
+				for (var i = 0; i < 3; i++) {
+					//创建webview子页
+					var sub = plus.webview.create(
+						subPages[i].url, //子页url
+						subPages[i].id, //子页id
+						{
+							top: '0px',
+							bottom: '51px',
+							scrollIndicator: "none"
+						}
+					);
+					//如果不是我们设置的子页就隐藏
+					if (i != index) {
+						sub.hide()
+					}
+					//将webview对象填充到窗口
+					self.append(sub);
+				}
+
+				//当前激活选项
+				var activeTab = subPages[index].id;
+				var targetTab;
+				mui('.mui-bar').on('tap', '.mui-tab-item', function(e) {
+					//获取子页面的id
+					var id = this.getAttribute('data-id');
+					targetTab = subPages[id].id;
+					if (activeTab == targetTab) {
+						return false;
+					}
+					//隐藏当前选项卡
+					plus.webview.hide(activeTab);
+					//更改当前活跃选项卡
+					activeTab = targetTab;
+					
+					if (targetTab == 'user_center') {
+						var token = plus.storage.getItem('token');
+						if (!token) {
+							mui.openWindow('html/login.html', 'login', {});
+						} else {
+							var userCenterPage = plus.webview.getWebviewById('user_center');
+							mui.fire(userCenterPage, 'loadData', {
+								token: token
+							});
+						}
+					}
+					//显示目标选项卡
+					plus.webview.show(targetTab, 'slide-in-right');
+				});
+
+				mui.back = function(event) {
+					mui.confirm('确定要离开汇友传媒APP吗？', '退出提示', ['确定', '取消'], function(e) {
+						if (e.index == 0) {
+							plus.runtime.quit();
+						}
+					});
+					return false;
+				};
+
+				// 获取本地应用资源版本号
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					var wgtVer = inf.version; //本地资源版本号
+					if (checkUpdate(wgtVer)) {
+						mui.alert('发现新资源文件，需要更新！', '检查更新', function() {
+							downWgt(); // 下载升级包
+						});
+					}
+				});
+
+			});
+			
+		</script>
+
+
+	</body>
+
+</html>

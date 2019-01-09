@@ -45,18 +45,14 @@
 				}
 			});
 
-			var adsdetail = null;
 			mui.plusReady(function() {
-				adsdetail = plus.webview.getWebviewById('ads_detail');
-				if (!adsdetail) {
-					adsdetail = mui.preload({
-						url: 'ads_detail.html',
-						id: 'ads_detail',
-						styles: {
-							scrollIndicator: 'none'
-						}
-					});
-				}
+				var adsdetail = mui.preload({
+					url: 'ads_detail.html',
+					id: 'ads_detail',
+					styles: {
+						scrollIndicator: 'none'
+					}
+				});
 
 				window.addEventListener('loadData', function(event) {
 					var token = event.detail.token;
@@ -78,7 +74,7 @@
 						success: function(data) {
 							if (data) {
 								document.getElementById('ad_list').innerHTML = data;
-								addEvent(token, levelId);
+								addEvent(token, levelId, adsdetail);
 							} else {
 								mui.alert('没有可以领取的任务');
 							}
@@ -87,7 +83,7 @@
 				});
 			});
 
-			function addEvent(token, levelId) {
+			function addEvent(token, levelId, adsdetail) {
 				mui('.mui-table-view').on('tap', '.mui-table-view-cell', function() {
 					var adsId = this.getAttribute('ads_Id');
 					var adsReceived = this.getAttribute('ads_received');
@@ -106,7 +102,7 @@
 						adsReceived: adsReceived,
 						token: token
 					});
-					adsdetail.show();
+					mui.openWindow('ads_detail.html','ads_detail',{});
 				});
 			}
 		</script>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    
+</head>
+<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">提交任务</h1>
+		</header>
+		
+		<div style="height:8px;"></div>
+		<div style="margin:44px 0 0 0;">
+			
+			<div id="image_btn_div" style="padding:0 15px;">
+				<button type="button" id="image_btn" class="mui-btn mui-btn-grey mui-btn-block">+添加截图</button>
+			</div>
+			<div id="taskli">
+				
+			</div>
+			<input type="hidden" name="aid" id="aid" value="">
+			<div style="height:8px;"></div>
+			<div id="submit_div" style="padding:0 15px;">
+				<input type="hidden" name="image_data" id="image_data" value="">
+				<button type="button" class="mui-btn mui-btn-red mui-btn-block" id="submit">上传数据</button>
+			</div>
+			
+			<div style="margin:15px;" id="guize">
+				
+				<p>任务领取规则：</p>
+				<p>1、VIP会员可领取每天2条朋友圈发布任务。</p>
+				<p>2、发布任务时必须与平台内的文案与图片一致【个人邀请好友海报+产品图2张】</p>
+				<p>3、不得屏蔽微信好友查看您的朋友圈。</p>
+				<p>4、上传图片必须是朋友圈全屏截图。</p>
+				
+				<img src="images/34.png" style="width:100%;">
+			</div>
+			
+		</div>
+		
+		
+		<script>
+			
+		//    var imgSrc = "img/1.jpg";
+		      function getBase64(img){//传入图片路径，返回base64
+		        function getBase64Image(img,width,height) {//width、height调用时传入具体像素值，控制大小 ,不传则默认图像大小
+		          var canvas = document.createElement("canvas");
+		          var img_width=img.width;
+		          var img_height=img.height;
+		          var canvas_width=300;
+		          var canvas_height=parseInt(canvas_width*img_height/img_width);
+		          //alert(canvas_height);
+		          canvas.width = canvas_width;
+		          canvas.height = canvas_height;
+		 
+		          var ctx = canvas.getContext("2d");
+		          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+		          var dataURL = canvas.toDataURL();
+		          return dataURL;
+		        }
+		        var image = new Image();
+		        image.crossOrigin = '';
+		        image.src = img;
+		        var deferred=$.Deferred();
+		        if(img){
+		          image.onload =function (){
+		            deferred.resolve(getBase64Image(image));//将base64传给done上传处理
+		          }
+		          return deferred.promise();//问题要让onload完成后再return sessionStorage['imgTest']
+		        }
+		      }
+		      
+			
+			document.getElementById("image_btn_div").addEventListener("tap",function(){
+				plus.gallery.pick(function(path){
+					
+					//$("#image_btn_div").html('<img src="'+path+'" style="max-width:100%;">');
+					
+					//console.log(getBase64(path));
+					getBase64(path)
+			        .then(function(base64){
+			        	$("#image_btn_div").html('<img src="'+base64+'" style="max-width:100%;">');
+			        	$("#image_data").val(base64);
+			          console.log(base64);
+			        },function(err){
+			          console.log(err);
+			        });
+					
+				},function(e){
+					console.log("取消选择图片");
+				},{filter:"image"});
+			});
+			
+			var token=null;
+			
+			setTimeout(function(){
+				token=plus.storage.getItem("token");
+				
+				document.getElementById("submit").addEventListener("tap",function(){
+				$("#submit").attr("readonly",true).removeClass("mui-btn-danger").addClass("mui-btn-primary");
+				
+				var image_data=$("#image_data").val();
+				var aid=$("#aid").val();
+				
+				//alert(aid);
+				$.post(base_url+"index.php/ad/uploadtask",{token:token,aid:aid,image_data:image_data},function(data){
+					if(data.status){
+						mui.alert(data.error);
+						location.reload();
+					}else{
+						mui.alert(data.error);
+						location.reload();
+					}
+				});
+				
+			});
+			
+			$.get(base_url+"index.php/ad/taskli?token="+token,{},function(data){
+				$("#taskli").html(data);
+			});
+			
+			$.get(base_url+"index.php/ad/guize?token="+token,{},function(data){
+					$("#guize").html(data);
+				});
+				
+			},500);
+			
+			
+		</script>
+		
+</body>
+</html>

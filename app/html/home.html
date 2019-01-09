@@ -184,10 +184,10 @@
 				initNotice(noticeDetailPage);
 			});
 
-			function initNotice() {
+			function initNotice(noticeDetailPage) {
 				var notice = document.getElementById('notice');
 				var addtime = plus.storage.getItem('notice_addtime');
-				addtime = addtime == null ? Date.parse(new Date()) / 1000 : addtime;
+				addtime = addtime == null ? 1546559927 : addtime;
 				mui.ajax(base_url + 'index.php/index/noticeList', {
 					data: {
 						addtime: addtime,
@@ -197,6 +197,7 @@
 					type: 'get', //HTTP请求类型
 					timeout: 2000, //超时时间设置为2秒
 					success: function(data) {
+						console.log(data)
 						if (data.length > 0) {
 							notice.innerText = data[0].title;
 							plus.storage.setItem('notice_addtime', data[0].addtime);

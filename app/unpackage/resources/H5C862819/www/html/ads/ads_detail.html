@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<base href="../../" />
+		<title>汇友传媒</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="css/mui.showLoading.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">任务详情</h1>
+		</header>
+		<div style="height:8px;"></div>
+		<div style="margin:44px 0 0 0;">
+			<div id="ad_content">
+				<div class="mui-card">
+					<div class="mui-card-header" id="ads_title"></div>
+					<div class="mui-card-content" style="padding:15px;">
+						<div style="border-bottom:1px solid #cccccc; margin-bottom:10px; padding-bottom:10px; color: #999999;">请将以下文案及图片发布到您的朋友圈（点击图片可保存图片到手机）</div>
+						<p id="ads_content"></p>
+					</div>
+					<div class="mui-card-footer" style="text-align: center;">
+						<button id="copyBtn" style="margin:0 auto; color:#0038AB; border:1px solid#0038AB;" data-clipboard-text="">复制文案</button>
+					</div>
+				</div>
+			</div>
+			<div id="ad_content_pic">
+				<div class="mui-card">
+					<div class="mui-card-header">图片信息</div>
+					<div class="mui-card-content" id="ads_images" style="padding:15px;">
+					</div>
+				</div>
+			</div>
+			<div id="ad_button" style="padding:0 10px;">
+				<button id="submitBtn" type="button" class="mui-btn mui-btn-danger mui-btn-block">领取任务</button>
+			</div>
+		</div>
+
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/clipboard.min.js"></script>
+		<script src="js/downloadImage.js"></script>
+		<script src="js/mui.showLoading.js"></script>
+		<script type="text/javascript">
+			var levelId,adsId,token;
+			mui.init({
+				beforeback: function() {
+					var adslist = plus.webview.getWebviewById('ads_list');
+					if (adslist) {
+						mui.fire(adslist, 'loadData', {
+							levelId: levelId,
+							token: token
+						});
+					}
+					document.getElementById('ads_title').innerText = '';
+					document.getElementById('ads_content').innerText = '';
+					document.getElementById('ads_images').innerHTML = '';
+					document.getElementById('copyBtn').setAttribute('data-clipboard-text', '');
+					document.getElementById('submitBtn').innerHTML = '领取任务';
+					document.getElementById('submitBtn').disabled = false;
+					return true;
+				}
+			});
+
+			var clipboard = new ClipboardJS('#copyBtn');
+			clipboard.on('success', function(e) {
+				mui.toast('复制成功!');
+			});
+
+			mui.plusReady(function() {
+				window.addEventListener('loadData', function(event) {
+					levelId = event.detail.levelId;
+					adsId = event.detail.adsId;
+					token = event.detail.token;
+					if (event.detail.adsReceived == '1') {
+						document.getElementById('submitBtn').innerHTML = '该任务已经领取';
+						document.getElementById('submitBtn').disabled = true;
+					}
+					mui.ajax(base_url + 'index.php/ad/ads_detail', {
+						data: {
+							adsId: adsId,
+							token: token
+						},
+						dataType: 'json',
+						type: 'get',
+						success: function(data) {
+							if (data) {
+								document.getElementById('ads_title').innerText = data.data.title;
+								document.getElementById('ads_content').innerText = data.data.content;
+								document.getElementById('copyBtn').setAttribute('data-clipboard-text', data.data.content);
+								var imgHtml = "";
+								for (var i = 0; i < data.data.images.length; i++) {
+									imgHtml += "<img src='" + data.data.images[i] + "' width='100%'/>";
+								}
+								document.getElementById('ads_images').innerHTML = imgHtml;
+							}
+						}
+					});
+				});
+
+				document.getElementById('submitBtn').addEventListener('tap', function() {
+					mui.showLoading("正在领取..","div");
+					this.disabled = true;
+					mui.ajax(base_url + 'index.php/ad/ads_get', {
+						data: {
+							adsId: adsId,
+							token: token
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						success: function(data) {
+							mui.hideLoading();
+							if (data) {
+								mui.alert(data.error);
+							} else {
+								mui.alert('请检查您的网络连接是否正常！');
+								this.disabled = false;
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.hideLoading();
+							mui.alert('请检查您的网络连接是否正常！');
+							this.disabled = false;
+						}
+					});
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

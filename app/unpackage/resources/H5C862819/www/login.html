@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    
+</head>
+<body style="background-color:#fe434e;">
+	<header id="header" class="mui-bar mui-bar-transparent">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">登录</h1>
+	</header>
+	<div style="text-align: center;">
+		<img src="images/logo_login.png" style="width:50%;margin-top:50px;">
+	</div>
+	<div style="width: 80%;margin:0 auto;">
+		<style>
+			.mui-icon-eye{ color:#FFFFFF;}
+			#mobile::-webkit-input-placeholder{color: #FFFFFF;}
+			#password::-webkit-input-placeholder{color: #FFFFFF;}
+		</style>
+		<form id="myform">
+			<div class="mui-input-row">
+				<span class="mui-icon mui-icon-person" style="color:#FFF; position: absolute; left:10px; top:5px;"></span>
+				<input id="mobile" type="text" name="username" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;" placeholder="手机号">
+			</div>
+			<div class="mui-input-row mui-password">
+				<span class="mui-icon mui-icon-locked" style="color:#FFF; position: absolute; left:10px; top:5px;"></span>
+				<input id="password" type="password" name="password" class="mui-input-password" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;" placeholder="密码">
+			</div>
+			
+			<button type="button" id="submit" class="mui-btn mui-btn-block mui-btn-outlined" style="border:0; border-radius:30px; background-color:#FFF;">登 录</button>
+			
+		</form>
+		
+		<div>
+			
+			<a href="javascript:void(0)" id="reg" style="color:#FFF;">立即注册</a>
+			<a href="javascript:void(0)" id="zhaohuimima" style="color:#FFF; float:right;">找回密码</a>
+			
+		</div>
+		<!--<div style="margin-top:20px;">
+			<span id="yz">验证登录</span>
+		</div>-->
+		
+		
+	</div>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script>
+		/**
+		mui.post('http://api.ad.com/index.php/login/user',{
+			username:mui('mobile'),
+			password:'password'
+		},function(data){
+			
+		},'json'
+	);**/
+	document.getElementById("submit").addEventListener("tap",function(){
+		//mui.alert(document.getElementById("mobile").value);
+		var username=document.getElementById("mobile").value;
+		var password1=document.getElementById("password").value;
+//		plus.storage.setItem('username', username);
+//		plus.storage.setItem('password', password1);
+//		mui.alert(plus.storage.getItem("username"));
+		//mui.alert(base_url);
+		$.get(base_url+'index.php/login/userlogin',{username:username,password:password1},function(data){
+			mui.alert(data.error);
+			plus.storage.setItem('token', data.data.token);
+			plus.storage.setItem('username',data.data.username);
+			//alert(data.data.username);
+			location.href="gerenzhongxin.html";
+		},'json');
+//		mui.ajax({
+//			url:"http://api.ad.com/index.php/login/user",
+//			data:{username:username,password:password1},
+//			
+//			crossDomain:true,
+//			type:'POST',
+//			timeout:10000,
+//			headers:{'Content-Type':'application/json'},
+//			success:function(data){
+//				mui.alert(data.data.id);
+//			},
+//			error:function(xhr,type,errorThrown){
+//				//异常处理；
+//				console.log(type);
+//			}
+//		});
+
+		
+	});
+	
+//	document.getElementById("yz").addEventListener("tap",function(){
+//			var token=plus.storage.getItem("token");
+//			$.get(base_url+'index.php/login/loginstatus',{token:token},function(data){
+//			if(!data.status){
+//				mui.alert(data.error);
+//			}else{
+//				mui.alert(data.error);
+//				plus.storage.clear();
+//			}
+//			mui.alert(plus.storage.getItem("token"));
+//			//plus.storage.setItem('token', data.data.token);
+//		},'json');
+//	});
+
+	document.getElementById("reg").addEventListener("tap",function(){
+		mui.openWindow({
+			url:"reg.html",
+			id:"reg"
+		});
+	});
+	
+	setTimeout(function(){
+		
+		document.getElementById("zhaohuimima").addEventListener("tap",function(){
+			location.href=base_url+"index.php/fun/zhaohuimima";
+		});
+		
+	},500);
+	
+	
+	</script>
+</body>
+</html>

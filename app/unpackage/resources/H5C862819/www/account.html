@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet" />
+    <script src="js/mui.view.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
+	<link href="css/mui.picker.css" rel="stylesheet" />
+	<link href="css/mui.poppicker.css" rel="stylesheet" />
+    
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    
+    <style>
+    	.mui-page.mui-transitioning {
+    -webkit-transition: -webkit-transform 300ms ease;
+    transition: transform 300ms ease;
+}
+
+.mui-page-left {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.mui-ios .mui-page-left {
+    -webkit-transform: translate3d(-20%, 0, 0);
+    transform: translate3d(-20%, 0, 0);
+}
+
+.mui-navbar .mui-btn-nav {
+    -webkit-transition-duration: .0s;
+    transition-duration: .0s;
+}
+
+.mui-navbar .mui-bar .mui-title {
+    display: inline-block;
+    width: auto;
+}
+
+.mui-page-shadow {
+    position: absolute;
+    right: 100%;
+    top: 0;
+    width: 16px;
+    height: 100%;
+    z-index: -1;
+    content: '';
+}
+
+.mui-page-shadow {
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+}
+
+.mui-navbar-inner.mui-transitioning,
+.mui-navbar-inner .mui-transitioning {
+    -webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.mui-page {
+    display: none;
+}
+
+.mui-pages .mui-page {
+    display: block;
+}
+.mui-page.mui-page-left{display: none;}
+    </style>
+</head>
+<body>
+	
+	<div class="mui-view">
+	    <div class="mui-navbar"></div>
+	    <div class="mui-pages"></div>
+	</div>
+	
+	<div class="mui-page" id="default_page">
+	    <!--header部分-->
+	    <header id="header" class=" mui-navbar-inner mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-back " style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">个人资料</h1>
+		</header>
+	    <!--内容区域-->
+	    <div class="mui-page-content">
+	    	
+	    	<div style="margin:44px 0 0 0;">
+				
+				<div style="height:8px;"></div>
+				
+				<ul class="mui-table-view">
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right" href="#truename"><span style="width:90px; float:left;">真实姓名：</span><span id="username"></span></a>
+				    </li>
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right"><span style="width:90px; float:left;">手机号：</span>
+				        <span id="mobile"></span>
+				        </a>
+				    </li>
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right" id="prov_btn"><span style="width:90px; float:left;">所属省份：</span><span id="prov">北京市</span></a>
+				        <input type="hidden" name="prov" value="北京市" id="prov_input">
+				    </li>
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right"><span style="width:90px; float:left;">所属城市：</span><span id="city">北京市</span></a>
+				        <input type="hidden" name="city" value="北京市" id="city_input">
+				    </li>
+				    
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right"><span style="width:90px; float:left;">所属市区：</span><span id="area">东城区</span></a>
+				        <input type="hidden" name="area" value="东城区" id="area_input">
+				    </li>
+				    <li class="mui-table-view-cell">
+				        <span style="float: left; margin-bottom:5px;">详细地址：</span>
+				        <textarea placeholder="请输入详细地址" id="address_input"></textarea>
+				    </li>
+				    
+				</ul>
+				
+				<div style="margin:20px 15px;">
+					<button type="button" class="mui-btn mui-btn-danger mui-btn-block" id="submit">确认</button>
+				</div>
+			
+			</div>
+	    	
+	    </div>
+	</div>
+	
+		
+	<div class="mui-page" id="truename">
+		<!--header部分-->
+	    <header id="header" class="mui-navbar-inner mui-bar mui-bar-nav " style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-back " style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">真实姓名</h1>
+		</header>
+	    <!--内容区域-->
+	    <div class="mui-page-content">
+	    	
+	    	<div style="margin:44px 0 0 0;">
+				<div style="height:8px;"></div>
+				<form class="mui-input-group">
+					<div class="mui-input-row">
+				    <input type="text" class="mui-input-clear" placeholder="请输入真实姓名" value="" id="username_input">
+				    </div>
+				    
+				</form>
+			
+				<div style="margin:20px 15px;">
+					<button type="button" class="mui-btn mui-btn-danger mui-btn-block" id="submit1">确认</button>
+				</div>
+			</div>
+	    	
+	    </div>
+	</div>
+	
+	
+		
+		<script src="js/mui.picker.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script src="js/city.data.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="js/jquery-3.3.1.min.js"></script>
+		
+		<script>
+			var viewApi = mui('.mui-view').view({
+			    defaultPage: '#default_page' //默认页面的选择器
+			});
+			var oldBack = mui.back;
+			mui.back = function() {
+			    if(viewApi.canBack()) {
+			        viewApi.back();
+			    } else {
+			        oldBack();
+			    }
+			};
+			(function($, doc) {
+				$.init();
+				$.ready(function() {
+					/**
+					 * 获取对象属性的值
+					 * 主要用于过滤三级联动中，可能出现的最低级的数据不存在的情况，实际开发中需要注意这一点；
+					 * @param {Object} obj 对象
+					 * @param {String} param 属性名
+					 */
+					var _getParam = function(obj, param) {
+						return obj[param] || '';
+					};
+					
+					var cityPicker3 = new $.PopPicker({
+						layer: 3
+					});
+					cityPicker3.setData(cityData3);
+					var showCityPickerButton = doc.getElementById('prov_btn');
+					//var cityResult3 = doc.getElementById('cityResult3');
+					showCityPickerButton.addEventListener('tap', function(event) {
+						cityPicker3.show(function(items) {
+							//cityResult3.innerText = "你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text') + " " + _getParam(items[2], 'text');
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+							jQuery("#prov").html(_getParam(items[0], 'text'));
+							jQuery("#city").html(_getParam(items[1], 'text'));
+							jQuery("#area").html(_getParam(items[2], 'text'));
+							jQuery("#prov_input").val(_getParam(items[0], 'text'));
+							jQuery("#city_input").val(_getParam(items[1], 'text'));
+							jQuery("#area_input").val(_getParam(items[2], 'text'));
+						});
+					}, false);
+				});
+			})(mui, document);
+			
+			var token=null;
+			
+			var ii=setTimeout(function(){
+				token=plus.storage.getItem("token");
+				$.get(base_url+"index.php/user/ziliao?token="+token,{},function(data){
+					if(data.status==200){
+						$("#username").html(data.data.data.username);
+						$("#mobile").html(data.data.data.mobile);
+						$("#prov").html(data.data.data.prov);
+						$("#city").html(data.data.data.city);
+						$("#area").html(data.data.data.area);
+						$("#prov_input").val(data.data.data.prov);
+						$("#city_input").val(data.data.data.city);
+						$("#area_input").val(data.data.data.area);
+						$("#address_input").html(data.data.data.address);
+						
+						$("#username_input").val(data.data.data.username);
+						
+					}else{
+						mui.alert(data.error);
+					}
+					
+				});
+			},500);
+			
+			document.getElementById("submit").addEventListener("tap",function(){
+				token=plus.storage.getItem("token");
+				var prov=$("#prov_input").val();
+				var city=$("#city_input").val();
+				var area=$("#area_input").val();
+				var address=$("#address_input").val();
+				$.post(base_url+"index.php/user/ziliao",{prov:prov,city:city,area:area,address:address,token:token},function(data){
+					if(data.status){
+						alert(data.error);
+					}else{
+						alert(data.error);
+					}
+				});
+			});
+			
+			document.getElementById("submit1").addEventListener("tap",function(){
+				token=plus.storage.getItem("token");
+				var username=$("#username_input").val();
+				$.post(base_url+"index.php/user/ziliao1",{username:username,token:token},function(data){
+					if(data.status){
+						alert(data.error);
+					}else{
+						alert(data.error);
+					}
+				});
+			});
+			
+		</script>
+		
+</body>
+</html>

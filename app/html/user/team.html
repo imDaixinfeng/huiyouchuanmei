@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<base href="../../" />
+		<title>个人中心</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-navigate-right>img {
+				width: 1.5rem;
+				float: left;
+				margin-right: 15px;
+			}
+		</style>
+	</head>
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">我的团队</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="team1">
+					<a class="mui-navigate-right">
+						<img src="images/30.png">
+						<div style="margin-top: 2px;">一级团队</div>
+						<span class="mui-badge mui-badge-danger" id="team1Count">0</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="team2">
+					<a class="mui-navigate-right">
+						<img src="images/30.png">
+						<div style="margin-top: 2px;">二级团队</div>
+						<span class="mui-badge mui-badge-danger" id="team2Count">0</span>
+					</a>
+				</li>
+
+			</ul>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			mui.plusReady(function() {
+				mui('.mui-table-view').on('tap', '.mui-table-view-cell', function() {
+					if (this.id == 'team1') {
+						mui.openWindow('team_one_list.html', 'team_one_list', {});
+					} else {
+						mui.openWindow('team_two_list.html', 'team_two_list', {});
+					}
+				});
+			});
+
+			setTimeout(function() {
+				mui.ajax(base_url + "index.php/user/teamCount", {
+					data: {
+						token: plus.storage.getItem('token')
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					success: function(data) {
+						if (data) {
+							document.getElementById("team1Count").innerText = data.firstTeamCount;
+							document.getElementById("team2Count").innerText = data.secondTeamCount;
+						}
+					}
+				});
+			}, 200);
+		</script>
+	</body>
+</html>

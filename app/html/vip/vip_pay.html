@@ -112,7 +112,7 @@
 							mui(_self).button('reset');
 							if (data && data.status == '200') {
 								document.getElementById('WIDout_trade_no').value = data.order_id;
-								document.getElementById('WIDtotal_amount').value = '0.01';
+								document.getElementById('WIDtotal_amount').value = data.payMoney;
 								document.getElementById('payform').submit();
 							}
 						},

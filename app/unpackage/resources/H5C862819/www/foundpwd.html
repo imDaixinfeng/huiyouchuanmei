@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>币赚</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/icons-extra.css" />
+		<!--App自定义的css-->
+	<link rel="stylesheet" type="text/css" href="css/app.css"/>
+</head>
+<body style="background-color:#fe434e;">
+	<header id="header" class="mui-bar mui-bar-transparent">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
+			<h1 class="mui-title" style="color:#FFF;">找回密码</h1>
+	</header>
+	<div style="text-align: center;">
+		<img src="images/logo_login.png" style="width:50%;margin-top:50px;">
+	</div>
+	<div style="width: 80%;margin:0 auto;">
+		<style>
+			.mui-icon-eye{ color:#FFFFFF;}
+			#mobile::-webkit-input-placeholder{color: #FFFFFF;}
+			#yanzhengma::-webkit-input-placeholder{color: #FFFFFF;}
+			#password::-webkit-input-placeholder{color: #FFFFFF;}
+			#repassword::-webkit-input-placeholder{color: #FFFFFF;}
+		</style>
+		<form>
+			<div class="mui-input-row">
+				<span class="mui-icon mui-icon-person" style="color:#FFF; position: absolute; left:10px; top:8px;"></span>
+				<input id="mobile" type="text" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;" placeholder="手机号">
+			</div>
+			
+			<div class="mui-input-row mui-password">
+				<span class="mui-icon mui-icon-locked" style="color:#FFF; position: absolute; left:10px; top:8px;"></span>
+				<input id="password" type="password" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;" placeholder="密码">
+			</div>
+			
+			<div class="mui-input-row mui-password">
+				<span class="mui-icon mui-icon-refresh" style="color:#FFF; position: absolute; left:10px; top:8px;"></span>
+				<input id="repassword" type="password" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 0 0 40px;" placeholder="确认密码">
+			</div>
+			
+			<div class="mui-input-row">
+				<span class="mui-icon mui-icon-paperplane" style="color:#FFF; position: absolute; left:10px; top:8px;"></span>
+				<span id="huoqu" style="color:#FFF; position: absolute; right:20px; top:8px;">| 获取</span>
+				<span id="miao" style="color:#FFF; position: absolute; right:20px; top:8px; display: none;">| 120s</span>
+				<input id="yanzhengma" type="text" style="border-radius:20px; background-color: #fe434e; border:1px solid #FFFFFF; color:#FFFFFF; padding:0 120px 0 40px;" placeholder="验证码">
+			</div>
+			
+			<button type="button" class="mui-btn mui-btn-block mui-btn-outlined" style="border:0; border-radius:30px; background-color:#FFF;" id="submit">找回密码</button>
+			
+		</form>
+		
+		
+	</div>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script>
+		
+		$(document).ready(function(){
+			
+			
+			$("#submit").click(function(){
+				
+				var mobile=$("#mobile").val();
+				var password=$("#password").val();
+				var repassword=$("#repassword").val();
+				var yanzhengma=$("#yanzhengma").val();
+				
+				if(mobile==''){
+					alert(mobile+"手机号不能为空!");
+				}else if(password==''){
+					alert("密码不能为空！");
+				}else if(repassword==''){
+					alert("确认密码不能空！");
+				}else if(yanzhengma==''){
+					alert("手机验证码不能为空！");
+				}else if(password!=repassword){
+					alert("新密码与确认密码不一致，请重新输入！");
+				}
+				
+				$.get(base_url+"index.php/register/zhaohuimima",{
+					phone:mobile,
+					password:password,
+					repassword:repassword,
+					code:yanzhengma
+				},function(data){
+					alert(data);
+				},"plant");
+				
+			});
+			
+			$("#huoqu").click(function(){
+				var mobile=$("#mobile").val();
+				var password=$("#password").val();
+				var repassword=$("#repassword").val();
+				
+				if(mobile==''){
+					alert("手机号不能为空!");
+				}else if(password==''){
+					alert("密码不能为空！");
+				}else if(repassword==''){
+					alert("确认密码不能空！");
+				}else if(password!=repassword){
+					alert("新密码与确认密码不一致，请重新输入！");
+				}
+				
+				$("#huoqu").hide();
+                $("#miao").show();
+                
+                $.get(base_url+"index.php/register/sms1",{
+                    phone:mobile
+                },function(data){
+                    if(data=='短信发送成功'){
+                        var j=120;
+                        var i=setInterval(function(){
+                            j--;
+                            $("#miao").html("| "+j);
+                            if(j<=0){
+                                $("#miao").hide();
+                                $("#huoqu").show();
+                                clearInterval(i);
+                            }
+                        },1000);
+                    }else{
+                        $("#huoqu").show();
+                        $("#miao").hide();
+                        mui.alert(data);
+                        
+                    }
+                });
+                
+                
+				
+			});
+			
+			
+			
+		});
+		
+	</script>
+	
+</body>
+</html>

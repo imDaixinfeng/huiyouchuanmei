@@ -5,16 +5,16 @@
     "name" : "汇友传媒",
     /*应用名称，程序桌面图标名称*/
     "version" : {
-        "name" : "1.1.8",
+        "name" : "1.1.18",
         /*应用版本名称*/
-        "code" : 10
+        "code" : 18
     },
     "description" : "",
     /*应用描述信息*/
     "icons" : {
         "72" : "icon.png"
     },
-    "launch_path" : "index1.html",
+    "launch_path" : "index.html",
     /*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
     "developer" : {
         "name" : "",
@@ -36,7 +36,15 @@
         "Storage" : {
             "description" : "本地存储，访问应用本地存储数据"
         },
-        "Payment" : {}
+        "Payment" : {
+			"description" : "管理支付"
+		},
+        "Share" : {
+			"description" : "支持分享"
+		},
+        "Maps" : {
+			"description" : "应用地图"
+		}
     },
     "plus" : {
         "splashscreen" : {
@@ -64,7 +72,11 @@
                 /*iOS应用打包个人证书，打包配置文件关联的个人证书*/
                 "devices" : "universal",
                 /*iOS应用支持的设备类型，可取值iphone/ipad/universal*/
-                "frameworks" : []
+                "frameworks" : [],
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "",
+                    "NSPhotoLibraryAddUsageDescription" : ""
+                }
             },
             "google" : {
                 "packagename" : "",
@@ -164,10 +176,20 @@
                     "iphone" : {
                         "default" : "",
                         /*iPhone3启动图片选，分辨率：320x480*/
-                        "retina35" : "",
+                        "retina35" : "images/app_start.png",
                         /*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
-                        "retina40" : "",
-                        "retina55" : ""
+                        "retina40" : "images/app_start.png",
+                        "retina55" : "images/app_start.png",
+                        "retina40l" : "images/app_start.png",
+                        "retina47" : "images/app_start.png",
+                        "retina47l" : "images/app_start.png",
+                        "retina55l" : "images/app_start.png",
+                        "iphonex" : "images/app_start.png",
+                        "iphonexl" : "images/app_start.png",
+                        "portrait-896h@2x" : "images/app_start.png",
+                        "landscape-896h@2x" : "images/app_start.png",
+                        "protrait-896h@3x" : "images/app_start.png",
+                        "landscape-896h@3x" : "images/app_start.png"
                     },
                     "ipad" : {
                         "portrait" : "",
@@ -192,11 +214,11 @@
                     /*普通屏启动图片，分辨率：240x282*/
                     "ldpi" : "",
                     /*大屏启动图片，分辨率：320x442*/
-                    "hdpi" : "images/yindao.png",
+                    "hdpi" : "images/app_start.png",
                     /*高分屏启动图片，分辨率：480x762*/
-                    "xhdpi" : "images/yindao.png",
+                    "xhdpi" : "images/app_start.png",
                     /*720P高分屏启动图片，分辨率：720x1242*/
-                    "xxhdpi" : "images/yindao.png"
+                    "xxhdpi" : "images/app_start.png"
                 }
             }
         }

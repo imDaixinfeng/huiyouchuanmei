@@ -11,7 +11,7 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<style>
 			.vipDiv{
-				width:80%;
+				width:90%;
 				height:50px;
 				display:flex;
 				align-items:center;
@@ -42,7 +42,11 @@
 		</header>
 		<div id="content" class="mui-content" style="background-color: #FFF;">
 			<img src="images/banner/2.jpg" style="width:100%;">
-			<div style="margin-top: 50px;display: block;" align="center" id="vipPayDiv">
+			<div style="margin-top: 20px;display: none;" align="center" id="vipTextDiv">
+				<font style="font-size: 1.2rem;color: red;font-weight: bold;" id="vipText">您已经是VIP会员！</font>
+			</div>
+			<div style="height: 20px;"></div>
+			<div style="display: block;" align="center" id="vipPayDiv">
 				<div class="vipDiv" id="vip">
 					<img src="images/vip.png" class="vipImg" />
 					<span class="vipText">普通VIP</span>
@@ -61,10 +65,7 @@
 					<img src="images/tuijian.png" class="tjImg" />
 					<img id="vipup_ok" src="images/vipok.png" style="margin-left: 35px;width: 30px;display: block;" />
 				</div>
-				<button id="vipBtn" type="button" class="mui-btn mui-btn-red mui-btn-block" style="width: 80%;margin-top: 50px;">成为高级VIP</button>
-			</div>
-			<div style="margin-top: 50px;display: none;" align="center" id="vipTextDiv">
-				<font style="font-size: 1.2rem;color: red;font-weight: bold;" id="vipText"></font>
+				<button id="vipBtn" type="button" class="mui-btn mui-btn-red mui-btn-block" style="width: 90%;margin-top: 50px;">成为高级VIP</button>
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
@@ -127,17 +128,22 @@
 						dataType: 'json',
 						success: function(data) {
 							console.log(data);
-							if (data && data.status == 100) {
+							if (data && data.status == 200) {
+								if (data.groupid == 1) {
+									document.getElementById('vipTextDiv').style.display = 'block';
+									document.getElementById('vipText').innerText = '您已经是VIP会员！';
+									document.getElementById('vip').style.display = 'none';
+								} else if (data.groupid == 2) {
+									document.getElementById('vipTextDiv').style.display = 'block';
+									document.getElementById('vipText').innerText = '您已经是高级VIP会员！';
+									document.getElementById('vipPayDiv').style.display = 'none';
+								}
 								document.getElementById('vip_money').innerText = '￥' + data.vipMoney;
 								document.getElementById('vipup_money').innerText = '￥' + data.vipupMoney;
 								document.getElementById('viplvl').value = data.viplvl;
 								document.getElementById('vipuplvl').value = data.vipuplvl;
 								levelId = data.vipuplvl;
-								payMoneyText = '￥' + data.vipupMoney;
-							} else if (data && data.status == 200) {
-								document.getElementById('vipPayDiv').style.display = 'none';
-								document.getElementById('vipTextDiv').style.display = 'block';
-								document.getElementById('vipText').innerText = data.vipDesc;
+								payMoneyText = '￥' + data.vipupMoney;								
 							}
 						}
 					});

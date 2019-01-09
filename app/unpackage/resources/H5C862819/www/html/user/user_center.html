@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<base href="../../" />
+		<title>个人中心</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-navigate-right > img{
+				width : 1.5rem;
+				float: left;
+				margin-right:15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div style="background-image:url(images/54.png); background-repeat:no-repeat;height:222px; background-size: cover;">
+				<div style="padding:23px 0; text-align: center;">
+					<div><img src="images/profilePhoto.png" width="90" style="border-radius:45px; border: 1px solid #FFF; overflow: hidden; position: relative;"
+						 id="profilePhoto">
+						<span style="position:absolute;padding:3px 3px; background-color: #F0AD4E;border-radius:5px; color: #FFF; font-size:0.8rem; top:100px;right:110px; z-index:1000;"
+						 id="groupname">普通会员</span>
+					</div>
+					<div style="margin-top:10px; color:#FFF;" id="username"></div>
+
+				</div>
+				<ul class="mui-table-view mui-grid-view" style="background-color:transparent;" id="caiwuxinxi">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4">
+						<a href="#">
+							<div class="mui-media-body" style="color:#FFF; height:auto; margin-top:0;"><span id="total_money">0</span>
+								<p style="color:#FFF;">总收入</p>
+							</div>
+						</a></li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4">
+						<a href="#">
+							<div class="mui-media-body" style="color:#FFF; height:auto;margin-top:0;"><span id="today_money">0</span>
+								<p style="color:#FFF;">今日收入</p>
+							</div>
+						</a></li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4">
+						<div class="mui-media-body" style="color:#FFF; height:auto;margin-top:0;"><span id="out_money">0</span>
+							<p style="color:#FFF;">已支出</p>
+						</div></a>
+					</li>
+				</ul>
+			</div>
+			<div style="height:8px;"></div>
+			<div id="myDiv">
+				<ul class="mui-table-view">
+					<!-- <li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="images/43.png">
+							<div style="margin-top: 5px;">个人资料</div>
+						</a>
+					</li> -->
+					<li class="mui-table-view-cell" id="myTeam">
+						<a class="mui-navigate-right">
+							<img src="images/myTeam.png">
+							<div style="margin-top: 5px;">我的团队</div>
+						</a>
+					</li>
+				</ul>
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" id="bindBank">
+						<a class="mui-navigate-right">
+							<img src="images/bankcard.png">
+							<div style="margin-top: 5px;">绑定银行卡</div>
+						</a>
+					</li>
+				</ul>
+
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" id="wallet">
+						<a class="mui-navigate-right">
+							<img src="images/wallet.png">
+							<div style="margin-top: 5px;">钱包</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" id="outMoney">
+						<a class="mui-navigate-right">
+							<img src="images/outmoney.png">
+							<div style="margin-top: 5px;">提现</div>
+						</a>
+					</li>
+				</ul>
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" id="checkUpdate">
+						<a class="mui-navigate-right">
+							<img src="images/update.png">
+							<div style="margin-top: 5px;">检查更新</div>
+						</a>
+					</li>
+				</ul>
+				<div style="height:8px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" id="logout">
+						<a class="mui-navigate-right">
+							<img src="images/logout.png">
+							<div style="margin-top: 5px;">退出</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/checkUpdate.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				window.addEventListener('loadData', function(event) {
+					var token = event.detail.token;
+					var username = plus.storage.getItem('username');
+					mui.ajax(base_url + "index.php/user/accountInfo", {
+						data: {
+							token: token
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						success: function(data) {
+							if (data) {
+								document.getElementById('username').innerText = username;
+								document.getElementById('total_money').innerText = data.total_money;
+								document.getElementById('today_money').innerText = data.today_money;
+								document.getElementById('out_money').innerText = data.out_money;
+								document.getElementById('groupname').innerText = data.groupname;
+							}
+						}
+					});
+				});
+
+				mui('#myDiv').on('tap', '.mui-table-view-cell', function() {
+					var id = this.getAttribute('id');
+					if (id == 'myTeam') {
+						mui.openWindow({
+							url: 'team.html',
+							id: 'team'
+						});
+					} else if (id == 'bindBank') {
+						mui.openWindow({
+							url: 'bindbank.html',
+							id: 'bindbank'
+						});
+					} else if (id == 'wallet') {
+						mui.openWindow({
+							url: 'wallet.html',
+							id: 'wallet'
+						});
+					} else if (id == 'outMoney') {
+						mui.openWindow({
+							url: 'outMoney.html',
+							id: 'outMoney'
+						});
+					} else if (id == 'checkUpdate') {
+						// 获取本地应用资源版本号
+						plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+							var wgtVer = inf.version; //本地资源版本号
+							if (!checkUpdate(wgtVer)) {
+								mui.alert('已经是最新版本！', '检查更新');
+							} else {
+								mui.alert('发现新资源文件，需要更新！', '检查更新', function() {
+									downWgt(); // 下载升级包
+								});
+							}
+						});
+					} else {
+						mui.confirm('确定要退出APP吗？','退出提示',['取消','确认'],function (e) {
+							if (e.index == 1) {
+								plus.runtime.quit();
+							}
+						})
+						
+					}
+				})
+			});
+		</script>
+	</body>
+
+</html>
