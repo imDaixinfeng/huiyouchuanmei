@@ -36,9 +36,9 @@
         "Storage" : {
             "description" : "本地存储，访问应用本地存储数据"
         },
-		"Invocation" : {
-			"description": "Native.js"
-		}
+        "Invocation" : {
+            "description" : "Native.js"
+        }
     },
     "plus" : {
         "splashscreen" : {
