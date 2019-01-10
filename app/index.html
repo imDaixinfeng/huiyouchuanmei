@@ -31,7 +31,7 @@
 		<script src="js/checkUpdate.js"></script>
 		<script type="text/javascript">
 			mui.init();
-
+			
 			mui.plusReady(function() {
 				//设置默认打开首页显示的子页序号
 				var index = 0;
@@ -49,16 +49,20 @@
 				}];
 				//获取当前页面所属的Webview窗口对象
 				var self = plus.webview.currentWebview();
+				var subPageStyle = {
+					top: '0px',
+					bottom: '51px',
+					scrollIndicator: "none"
+				};
+				if (plus.device.model === 'iPhoneX') {
+					subPageStyle.bottom = '85px';
+				}
 				for (var i = 0; i < 3; i++) {
 					//创建webview子页
 					var sub = plus.webview.create(
 						subPages[i].url, //子页url
 						subPages[i].id, //子页id
-						{
-							top: '0px',
-							bottom: '51px',
-							scrollIndicator: "none"
-						}
+						subPageStyle
 					);
 					//如果不是我们设置的子页就隐藏
 					if (i != index) {
@@ -82,7 +86,7 @@
 					plus.webview.hide(activeTab);
 					//更改当前活跃选项卡
 					activeTab = targetTab;
-					
+
 					if (targetTab == 'user_center') {
 						var token = plus.storage.getItem('token');
 						if (!token) {
@@ -118,7 +122,6 @@
 				});
 
 			});
-			
 		</script>
 
 

@@ -36,14 +36,8 @@
         "Storage" : {
             "description" : "本地存储，访问应用本地存储数据"
         },
-        "Payment" : {
-			"description" : "管理支付"
-		},
-        "Share" : {
-			"description" : "支持分享"
-		},
-        "Maps" : {
-			"description" : "应用地图"
+		"Invocation" : {
+			"description": "Native.js"
 		}
     },
     "plus" : {
@@ -111,7 +105,7 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            "orientation" : [ "portrait-primary", "portrait-secondary" ],
+            "orientation" : [ "portrait-primary" ],
             /*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
             "icons" : {
                 "ios" : {

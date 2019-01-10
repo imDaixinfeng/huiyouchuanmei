@@ -69,12 +69,38 @@
 				}
 			});
 
-			var clipboard = new ClipboardJS('#copyBtn');
+			/* var clipboard = new ClipboardJS('#copyBtn');
 			clipboard.on('success', function(e) {
 				mui.toast('复制成功!');
-			});
+			}); */
 
 			mui.plusReady(function() {
+				document.getElementById('copyBtn').addEventListener('tap', function() {
+					var copy = document.getElementById('ads_content').innerText;
+					//判断是安卓还是ios
+					if(mui.os.ios){
+						//ios
+						var UIPasteboard = plus.ios.importClass("UIPasteboard");
+						var generalPasteboard = UIPasteboard.generalPasteboard();
+						//设置/获取文本内容:
+						generalPasteboard.plusCallMethod({
+							setValue:copy,
+							forPasteboardType: "public.utf8-plain-text"
+						});
+						generalPasteboard.plusCallMethod({
+							valueForPasteboardType: "public.utf8-plain-text"
+						});
+						mui.toast("已成功复制到剪贴板");
+					}else{
+						//安卓
+						var context = plus.android.importClass("android.content.Context");
+						var main = plus.android.runtimeMainActivity();
+						var clip = main.getSystemService(context.CLIPBOARD_SERVICE);
+						plus.android.invoke(clip,"setText",copy);
+						mui.toast("已成功复制到剪贴板");
+					}
+				});
+				
 				window.addEventListener('loadData', function(event) {
 					levelId = event.detail.levelId;
 					adsId = event.detail.adsId;

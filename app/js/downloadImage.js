@@ -23,67 +23,49 @@ mui.plusReady(function() {
 		if(name === "img") {
 			var imgUrl = event.target.src;
 			console.log('图片地址：' + imgUrl);
-			var suffix = cutImageSuffix(imgUrl);
-			/**
-			 * http://dev.dcloud.net.cn/mui/ui/#dialog
-			 */
-			mui.confirm("是否保存此图片", "确认保存？", ["保存", "不保存"], function(event) {
-				/**
-				 * index从0开始
-				 */
+			var newName = getNewImageName(imgUrl);
+			mui.confirm("是否保存此图片？", "确认保存", ["不保存", "保存"], function(event) {
 				var index = event.index;
-				if(index == 0) {
-					/**
-					 * 创建下载任务
-					 * http://www.html5plus.org/doc/zh_cn/downloader.html#plus.downloader.createDownload
-					 */
+				if(index == 1) {
 					var downLoader = plus.downloader.createDownload(imgUrl, {
 						method: 'GET',
-						filename: '_downloads/image' + suffix
+						filename: '_downloads/' + newName
 					}, function(download, status) {
 						var fileName = download.filename;
 						console.log('文件名:' + fileName);
 						console.log('下载状态：' + status);
-						/**
-						 * 保存至本地相册
-						 * http://www.html5plus.org/doc/zh_cn/gallery.html#plus.gallery.save
-						 */
-						plus.gallery.save(fileName, function() {
-							/**
-							 * 保存后，弹出对话框是否查看；
-							 * http://dev.dcloud.net.cn/mui/ui/#dialog
-							 */
-//							mui.confirm("打开相册", "打开相册？", ["打开", "不看"], function(event) {
-//								var gindex = event.index;
-//								if(gindex == 0) {
-//									/**
-//									 * 选择图片
-//									 * http://www.html5plus.org/doc/zh_cn/gallery.html#plus.gallery.pick
-//									 */
-//									plus.gallery.pick(function(file) {
-//										mui.toast("你选择了图片：" + file);
-//									}, function(error) {
-//										console.log(error);
-//									}, {
-//
-//									});
-//								}
-//							});
-						});
+						plus.gallery.save(fileName);
 					});
-					/**
-					 * 开始下载任务
-					 * http://www.html5plus.org/doc/zh_cn/downloader.html#plus.downloader.Download.start
-					 */
 					downLoader.start();
 				}
-			});
+			},'div');
 		}
 	});
 });
 
-// 截取图片后缀用于重命名图片，防止%E5%85%89%E6%98%8E%E8%A1%8C编码的文件不被系统相册识别；
-function cutImageSuffix(imageUrl) {
+function getNewImageName(imageUrl) {
 	var index = imageUrl.lastIndexOf('.');
-	return imageUrl.substring(index);
+	var newName = randomWord(false, 18);
+	return newName+imageUrl.substring(index);
+}
+
+/*
+** randomWord 产生任意长度随机字母数字组合
+** randomFlag-是否任意长度 min-任意长度最小位[固定位数] max-任意长度最大位
+** xuanfeng 2014-08-28
+*/
+function randomWord(randomFlag, min, max){
+    var str = "",
+        range = min,
+        arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+ 
+    // 随机产生
+    if(randomFlag){
+        range = Math.round(Math.random() * (max-min)) + min;
+    }
+    for(var i=0; i<range; i++){
+        pos = Math.round(Math.random() * (arr.length-1));
+        str += arr[pos];
+    }
+    return str;
 }

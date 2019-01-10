@@ -187,31 +187,24 @@
 			function initNotice(noticeDetailPage) {
 				var notice = document.getElementById('notice');
 				var addtime = plus.storage.getItem('notice_addtime');
-				addtime = addtime == null ? 1546559927 : addtime;
-				mui.ajax(base_url + 'index.php/index/noticeList', {
-					data: {
-						addtime: addtime,
-						type: '1'
-					},
+				addtime = addtime == null ? '' : addtime;
+				mui.ajax(base_url + 'index.php/index/newNotice', {
 					dataType: 'json', //服务器返回json格式数据
 					type: 'get', //HTTP请求类型
-					timeout: 2000, //超时时间设置为2秒
 					success: function(data) {
-						console.log(data)
-						if (data.length > 0) {
-							notice.innerText = data[0].title;
-							plus.storage.setItem('notice_addtime', data[0].addtime);
-							if (data.length > 1) { //说明有最新的公告,弹出是否查看对话框
-								mui.confirm(data[0].title, '最新公告', ['查看', '取消'], function(e) {
-									if (e.index == 0) {
+						if (data.addtime) {
+							notice.innerText = data.title;
+							plus.storage.setItem('notice_addtime', data.addtime);
+							if (addtime == '' || addtime != data.addtime) {
+								mui.confirm(data.title, '最新公告', ['取消', '查看'], function(e) {
+									if (e.index == 1) {
 										mui.fire(noticeDetailPage, 'loadData', {
-											id: data[0].id
+											id: data.id
 										});
 										noticeDetailPage.show();
 									}
-								});
+								},'div');
 							}
-
 						}
 					}
 				});
@@ -223,7 +216,6 @@
 					type: 'get',
 					timeout: 2000,
 					success: function(data) {
-						console.log(data);
 						setMarquee(data);
 					}
 				});

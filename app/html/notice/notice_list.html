@@ -56,8 +56,8 @@
 					detailPage = mui.preload({
 						url: 'notice_detail.html',
 						id: 'notice_detail',
-						styles : {
-							scrollIndicator : 'none'
+						styles: {
+							scrollIndicator: 'none'
 						}
 					});
 				}
@@ -65,7 +65,7 @@
 
 			function initData() {
 				var table = document.body.querySelector('.mui-table-view');
-				mui.ajax(base_url+'index.php/index/noticeList', {
+				mui.ajax(base_url + 'index.php/index/noticeList', {
 					data: {
 						addtime: Date.parse(new Date()) / 1000,
 						type: '2'
@@ -94,26 +94,30 @@
 				var last = table.querySelector('li:last-child');
 				var addtime = last != null ? last.getAttribute('data-id') : Date.parse(new Date()) / 1000;
 				var _self = this;
-				mui.ajax(base_url+'index.php/index/noticeList', {
+				mui.ajax(base_url + 'index.php/index/noticeList', {
 					data: {
 						addtime: addtime,
 						type: '2'
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'get', //HTTP请求类型
-					timeout: 2000, //超时时间设置为2秒
 					success: function(data) {
-						console.log(data);
-						for (var i = 0; i < data.length; i++) {
-							var item = data[i];
-							//通过getItemElement函数将数据转换为可插入的Element元素
-							table.appendChild(getItemElement(item));
+						if (data) {
+							for (var i = 0; i < data.length; i++) {
+								var item = data[i];
+								//通过getItemElement函数将数据转换为可插入的Element元素
+								table.appendChild(getItemElement(item));
+							}
+							//如果列表为空，表示以前的产品加载完了
+							_self.endPullupToRefresh(data.length == 0);
+						} else {
+							mui.toast("请确认您的网络连接是否正常...");
+							_self.endPullupToRefresh(false);
 						}
-						//如果列表为空，表示以前的产品加载完了
-						_self.endPullupToRefresh(data.length == 0);
+
 					},
 					error: function(e) {
-						mui.toast("加载出错，请稍候尝试...");
+						mui.toast("请确认您的网络连接是否正常...");
 						_self.endPullupToRefresh(false);
 					}
 				});
@@ -126,26 +130,28 @@
 				var table = document.body.querySelector('.mui-table-view');
 				var last = table.querySelector('li:first-child');
 				var addtime = last != null ? last.getAttribute('data-id') : Date.parse(new Date()) / 1000;
-				mui.ajax(base_url+'index.php/index/noticeList', {
+				mui.ajax(base_url + 'index.php/index/noticeList', {
 					data: {
 						addtime: addtime,
 						type: '1'
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'get', //HTTP请求类型
-					timeout: 2000, //超时时间设置为2秒
 					success: function(data) {
-						console.log(data);
-						if (data.length > 1) { //从第二条开始,防止重复加载第一条
-							for (var i = 1; i <= data.length; i++) {
-								var item = data[i];
-								table.insertBefore(getItemElement(item), table.firstChild);
+						if (data) {
+							if (data.length > 1) { //从第二条开始,防止重复加载第一条
+								for (var i = 1; i <= data.length; i++) {
+									var item = data[i];
+									table.insertBefore(getItemElement(item), table.firstChild);
+								}
 							}
+							mui('#pullrefresh').pullRefresh().endPulldown(data.length == 0);
 						}
-						mui('#pullrefresh').pullRefresh().endPulldown(data.length == 0);
+						mui.toast("请确认您的网络连接是否正常...");
+						mui('#pullrefresh').pullRefresh().endPulldown(false);
 					},
 					error: function(e) {
-						mui.toast("加载出错，请稍候尝试...");
+						mui.toast("请确认您的网络连接是否正常...");
 						mui('#pullrefresh').pullRefresh().endPulldown(false);
 					}
 				});

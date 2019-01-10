@@ -59,35 +59,35 @@
 							<div style="margin-top: 5px;">个人资料</div>
 						</a>
 					</li> -->
-					<li class="mui-table-view-cell" id="myTeam">
+					<li class="mui-table-view-cell" id="team" url = "team.html">
 						<a class="mui-navigate-right">
 							<img src="images/myTeam.png">
-							<div style="margin-top: 5px;">我的团队</div>
+							<div style="margin-top: 2px;">我的团队</div>
 						</a>
 					</li>
 				</ul>
 				<div style="height:8px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" id="bindBank">
+					<li class="mui-table-view-cell" id="bindbank" url = "bindbank.html">
 						<a class="mui-navigate-right">
 							<img src="images/bankcard.png">
-							<div style="margin-top: 5px;">绑定银行卡</div>
+							<div style="margin-top: 2px;">绑定银行卡</div>
 						</a>
 					</li>
 				</ul>
 
 				<div style="height:8px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" id="wallet">
+					<li class="mui-table-view-cell" id="wallet" url = "wallet.html">
 						<a class="mui-navigate-right">
 							<img src="images/wallet.png">
-							<div style="margin-top: 5px;">钱包</div>
+							<div style="margin-top: 2px;">钱包</div>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" id="outMoney">
+					<li class="mui-table-view-cell" id="outMoney" url = "outMoney.html">
 						<a class="mui-navigate-right">
 							<img src="images/outmoney.png">
-							<div style="margin-top: 5px;">提现</div>
+							<div style="margin-top: 2px;">提现</div>
 						</a>
 					</li>
 				</ul>
@@ -96,7 +96,7 @@
 					<li class="mui-table-view-cell" id="checkUpdate">
 						<a class="mui-navigate-right">
 							<img src="images/update.png">
-							<div style="margin-top: 5px;">检查更新</div>
+							<div style="margin-top: 2px;">检查更新</div>
 						</a>
 					</li>
 				</ul>
@@ -105,7 +105,7 @@
 					<li class="mui-table-view-cell" id="logout">
 						<a class="mui-navigate-right">
 							<img src="images/logout.png">
-							<div style="margin-top: 5px;">退出</div>
+							<div style="margin-top: 2px;">退出登录</div>
 						</a>
 					</li>
 				</ul>
@@ -117,51 +117,62 @@
 			mui.init();
 			mui.plusReady(function() {
 				window.addEventListener('loadData', function(event) {
-					setTimeout(function(){
-						var token = event.detail.token;
-						var username = plus.storage.getItem('username');
-						mui.ajax(base_url + "index.php/user/accountInfo", {
-							data: {
-								token: token
-							},
-							dataType: 'json', //服务器返回json格式数据
-							type: 'get', //HTTP请求类型
-							success: function(data) {
-								if (data.total_money) {
-									document.getElementById('username').innerText = username;
-									document.getElementById('total_money').innerText = data.total_money;
-									document.getElementById('today_money').innerText = data.today_money;
-									document.getElementById('out_money').innerText = data.out_money;
-									document.getElementById('groupname').innerText = data.groupname;
-								}
+					var token = event.detail.token;
+					var username = plus.storage.getItem('username');
+					mui.ajax(base_url + "index.php/user/accountInfo", {
+						data: {
+							token: token
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						success: function(data) {
+							if (data.total_money) {
+								document.getElementById('username').innerText = username;
+								document.getElementById('total_money').innerText = data.total_money;
+								document.getElementById('today_money').innerText = data.today_money;
+								document.getElementById('out_money').innerText = data.out_money;
+								document.getElementById('groupname').innerText = data.groupname;
 							}
-						});
-					},200);
+						}
+					});
 				});
 
 				mui('#myDiv').on('tap', '.mui-table-view-cell', function() {
 					var id = this.getAttribute('id');
-					if (id == 'myTeam') {
-						mui.openWindow({
-							url: 'team.html',
-							id: 'team'
-						});
-					} else if (id == 'bindBank') {
-						mui.openWindow({
-							url: 'bindbank.html',
-							id: 'bindbank'
-						});
-					} else if (id == 'wallet') {
-						mui.openWindow({
-							url: 'wallet.html',
-							id: 'wallet'
-						});
-					} else if (id == 'outMoney') {
-						mui.openWindow({
-							url: 'outMoney.html',
-							id: 'outMoney'
-						});
-					} else if (id == 'checkUpdate') {
+					var url =  this.getAttribute('url');
+					if (id != 'checkUpdate') {
+						var token = plus.storage.getItem('token');
+						if (!token) {
+							mui.alert('您还没有登录！',function (e) {
+							   mui.openWindow({
+							   	url: '../login.html',
+							   	id: 'login'
+							   });
+							},'div');
+						} else {
+							if (id == 'logout') {
+								mui.confirm('确定要退出登录吗？','退出提示',['取消','确认'],function (e) {
+									if (e.index == 1) {
+										plus.storage.removeItem('token');
+										document.getElementById('username').innerText = '';
+										document.getElementById('total_money').innerText = '0';
+										document.getElementById('today_money').innerText = '0';
+										document.getElementById('out_money').innerText = '0';
+										document.getElementById('groupname').innerText = '普通会员';
+										mui.openWindow({
+											url: '../login.html',
+											id: 'login'
+										});
+									}
+								},'div');
+							} else {
+								mui.openWindow({
+									id: id,
+									url: url
+								});
+							}
+						}
+					} else {
 						// 获取本地应用资源版本号
 						plus.runtime.getProperty(plus.runtime.appid, function(inf) {
 							var wgtVer = inf.version; //本地资源版本号
@@ -173,15 +184,8 @@
 								});
 							}
 						});
-					} else {
-						mui.confirm('确定要退出APP吗？','退出提示',['取消','确认'],function (e) {
-							if (e.index == 1) {
-								plus.runtime.quit();
-							}
-						})
-						
 					}
-				})
+				});
 			});
 		</script>
 	</body>

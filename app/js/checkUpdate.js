@@ -6,7 +6,6 @@ function checkUpdate(wgtVer) {
 		timeout: 20000, //超时时间设置为20秒
 		async: false,
 		success: function(newVer) {
-			console.log('wgtVer:'+wgtVer+',newVer:'+newVer)
 			if (wgtVer != newVer) {
 				needUpdate = true;
 			}
@@ -59,6 +58,7 @@ function installWgt(wgtpath) {
 		plus.runtime.restart();
 		//});
 	}, function(error) {
+		alert(error.message);
 		wgtWaiting.close();
 		delWgtFile(wgtpath);
 		mui.alert("应用更新失败，请下载最新版APP直接安装！", '更新失败');
