@@ -59,7 +59,7 @@
 							<div style="margin-top: 5px;">个人资料</div>
 						</a>
 					</li> -->
-					<li class="mui-table-view-cell" id="team" url = "team.html">
+					<li class="mui-table-view-cell" id="team" url="team.html">
 						<a class="mui-navigate-right">
 							<img src="images/myTeam.png">
 							<div style="margin-top: 2px;">我的团队</div>
@@ -68,7 +68,7 @@
 				</ul>
 				<div style="height:8px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" id="bindbank" url = "bindbank.html">
+					<li class="mui-table-view-cell" id="bindbank" url="bindbank.html">
 						<a class="mui-navigate-right">
 							<img src="images/bankcard.png">
 							<div style="margin-top: 2px;">绑定银行卡</div>
@@ -78,13 +78,13 @@
 
 				<div style="height:8px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" id="wallet" url = "wallet.html">
+					<li class="mui-table-view-cell" id="wallet" url="wallet.html">
 						<a class="mui-navigate-right">
 							<img src="images/wallet.png">
 							<div style="margin-top: 2px;">钱包</div>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" id="outMoney" url = "outMoney.html">
+					<li class="mui-table-view-cell" id="outMoney" url="outMoney.html">
 						<a class="mui-navigate-right">
 							<img src="images/outmoney.png">
 							<div style="margin-top: 2px;">提现</div>
@@ -126,32 +126,42 @@
 						dataType: 'json', //服务器返回json格式数据
 						type: 'get', //HTTP请求类型
 						success: function(data) {
-							if (data.total_money) {
-								document.getElementById('username').innerText = username;
-								document.getElementById('total_money').innerText = data.total_money;
-								document.getElementById('today_money').innerText = data.today_money;
-								document.getElementById('out_money').innerText = data.out_money;
-								document.getElementById('groupname').innerText = data.groupname;
+							if (data.error && data.error == 'Unauthorized') {
+								mui.alert('登录验证信息已过期，为了您的账号安全请重新登录！', function() {
+									mui.openWindow({
+										url: '../login.html',
+										id: 'login'
+									});
+								});
+							} else {
+								if (data.total_money) {
+									document.getElementById('username').innerText = username;
+									document.getElementById('total_money').innerText = data.total_money;
+									document.getElementById('today_money').innerText = data.today_money;
+									document.getElementById('out_money').innerText = data.out_money;
+									document.getElementById('groupname').innerText = data.groupname;
+								}
 							}
+							
 						}
 					});
 				});
 
 				mui('#myDiv').on('tap', '.mui-table-view-cell', function() {
 					var id = this.getAttribute('id');
-					var url =  this.getAttribute('url');
+					var url = this.getAttribute('url');
 					if (id != 'checkUpdate') {
 						var token = plus.storage.getItem('token');
 						if (!token) {
-							mui.alert('您还没有登录！',function (e) {
-							   mui.openWindow({
-							   	url: '../login.html',
-							   	id: 'login'
-							   });
-							},'div');
+							mui.alert('您还没有登录！', function(e) {
+								mui.openWindow({
+									url: '../login.html',
+									id: 'login'
+								});
+							});
 						} else {
 							if (id == 'logout') {
-								mui.confirm('确定要退出登录吗？','退出提示',['取消','确认'],function (e) {
+								mui.confirm('确定要退出登录吗？', '退出提示', ['取消', '确认'], function(e) {
 									if (e.index == 1) {
 										plus.storage.removeItem('token');
 										document.getElementById('username').innerText = '';
@@ -164,7 +174,7 @@
 											id: 'login'
 										});
 									}
-								},'div');
+								}, 'div');
 							} else {
 								mui.openWindow({
 									id: id,
