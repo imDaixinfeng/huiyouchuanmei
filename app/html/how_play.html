@@ -10,22 +10,16 @@
     <link href="css/mui.min.css" rel="stylesheet" />
 </head>
 <body>
-	<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+	<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);background-size:cover;">
 		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
 		<h1 class="mui-title" style="color:#FFF;">如何赚佣</h1>
 	</header>
-	<div id="content">
+	<div class="mui-content">
+		<img src="images/how_play.jpg" width="100%" />
 	</div>
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
-		mui.ajax(base_url+'index.php/index/zhuanyongguize', {
-			dataType: 'text', //服务器返回json格式数据
-			type: 'get', //HTTP请求类型
-			success: function(data) {
-				document.getElementById('content').innerHTML = data;
-			}
-		});
 	</script>
 		
 </body>

@@ -9,39 +9,145 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title>汇友传媒</title>
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.canimg {
+				width: 100%;
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+			}
+		</style>
 	</head>
 
 	<body style="background-color: #FFF;">
-		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);">
+		<header id="header" class="mui-bar mui-bar-nav" style="background-image: url(images/top.png);;background-size:cover;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#FFF;"></a>
 			<h1 class="mui-title" style="color:#FFF;">推广二维码</h1>
 		</header>
 
 		<div id="content" class="mui-content" style="background-color: #FFF;">
+			<img id="qrcodeImage" src="images/poster.png" width="100%" />
+			<div id="qrcode" style="display: none;"></div>
 		</div>
 		<h6 style="color: red;margin-left: 8px;display: none;" id="textN">长按保存到手机相册，然后转发到朋友圈</h6>
 		<script src="js/mui.min.js"></script>
-		<script src="js/downloadImage.js"></script>
+		<script src="js/qrcode.min.js"></script>
 		<script type="text/javascript">
-			mui.init();
-			
-			mui.plusReady(function () {
-			    mui.ajax(base_url + "index.php/index/tuiguang", {
-			    	data: {
-			    		token: plus.storage.getItem('token')
-			    	},
-			    	type: 'get', //HTTP请求类型
-			    	success: function(data) {
-			    		document.getElementById('content').innerHTML = data;
-						document.getElementById('textN').style.display = 'block';
-			    	}
-			    });
-				
-				mui.back = function () {
-				    plus.webview.currentWebview().hide();
+			mui.init({
+				gestureConfig: {
+					longtap: true
 				}
 			});
-			
+
+			var token = null;
+			mui.plusReady(function() {
+				var qrcodeImage = document.getElementById('qrcodeImage');
+				token = plus.storage.getItem('token');
+				var fileName = "_doc/" + token + ".png";
+
+				//先读取本地二维码图片
+				plus.io.resolveLocalFileSystemURL(fileName, function(entry) {
+					entry.file(function(file) { //存在直接展示
+						var fileReader = new plus.io.FileReader();
+						fileReader.onload = function(evt) {
+							qrcodeImage.src = evt.target.result;
+						};
+						fileReader.onerror = function(evt) { //从本地读取图片失败后重新渲染
+							renderQrCodeImage();
+						};
+						fileReader.readAsDataURL(file);
+					});
+				}, function(e) { //不存在重新渲染
+					renderQrCodeImage();
+				});
+
+				var bitmap = new plus.nativeObj.Bitmap();
+				document.getElementById('qrcodeImage').addEventListener("longtap", function(event) {
+					var imageBase64 = event.target.src.replace("data:image/png;base64,", "");
+					mui.confirm("是否保存此图片？", "确认保存", ["不保存", "保存"], function(event) {
+						if (event.index == 1) {
+							bitmap.loadBase64Data(imageBase64, function() {
+								bitmap.save(fileName, {
+									overwrite: true,
+									quality: 100
+								}, function(i) {
+									plus.gallery.save(fileName, function() { //保存到相册
+										mui.toast('保存成功！');
+									});
+								}, function(e) {
+									mui.toast('保存失败！');
+								});
+							}, function() {
+								mui.toast('保存失败！');
+							});
+						}
+					});
+				});
+
+				mui.back = function() {
+					plus.webview.currentWebview().hide();
+				}
+			});
+
+			function renderQrCodeImage() {
+				mui.ajax({
+					url: base_url + "index.php/user/qrcodeUrl",
+					data: {
+						token: token
+					},
+					dataType: 'json',
+					crossDomain: true, //强制使用5+跨域
+					type: 'get',
+					timeout: 10000,
+					success: function(data) {
+						if (data.error && data.error == 'Unauthorized') {
+							mui.alert('登录验证信息已过期，为了您的账号安全请重新登录！', function() {
+								mui.openWindow({
+									url: '../login.html',
+									id: 'login'
+								});
+							});
+						} else {
+							if (data.qrcodeUrl) {
+								canvasQrCodeImage(data.qrcodeUrl);
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.alert('请检查您的网络连接是否正常！');
+					}
+				});
+			}
+
+			function canvasQrCodeImage(qrcodeUrl) {
+				var qrcode = new QRCode('qrcode', {
+					text: qrcodeUrl,
+					width: 430,
+					height: 430,
+					correctLevel: QRCode.CorrectLevel.H
+				});
+
+				var posterImage = new Image();
+				posterImage.src = "images/poster.png";
+				posterImage.onload = function() {
+					var c = document.createElement('canvas');
+					ctx = c.getContext('2d');
+					c.width = posterImage.naturalWidth;
+					c.height = posterImage.naturalHeight;
+					ctx.drawImage(posterImage, 0, 0, c.width, c.height);
+
+					var qrcodeImg = new Image();
+					qrcodeImg.src = (mui("canvas")[0]).toDataURL("image/png");
+					qrcodeImg.onload = function() {
+						ctx.drawImage(qrcodeImg, 325, 670, qrcodeImg.width, qrcodeImg.width);
+					}
+
+					setTimeout(function() {
+						document.getElementById('qrcodeImage').src = c.toDataURL("image/png");
+					}, 10);
+				};
+			}
 		</script>
 	</body>
 

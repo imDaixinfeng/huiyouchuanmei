@@ -48,39 +48,39 @@
 				</li>
 			</ul>
 			<ul class="mui-table-view mui-grid-view mui-grid-9" style="background-color:#FFF;">
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="how_play" url="how_play.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="how_play" url="how_play.html">
 					<img src="images/icon_1.png" width="50%">
 					<div class="mui-media-body">如何赚佣</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="go_vip" url="vip/go_vip.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="go_vip" url="vip/go_vip.html">
 					<img src="images/icon_7.png" width="50%"></img>
 					<div class="mui-media-body">成为会员</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="gen_qrcode" url="gen_qrcode.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="gen_qrcode" url="gen_qrcode.html">
 					<img src="images/icon_2.png" width="50%"></img>
 					<div class="mui-media-body">推广二维码</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="ads_type" url="ads/ads_type.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="ads_type" url="ads/ads_type.html">
 					<img src="images/icon_5.png" width="50%"></img>
 					<div class="mui-media-body">领取任务</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="ads_add" url="ads/ads_add.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="ads_add" url="ads/ads_add.html">
 					<img src="images/icon_10.png" width="50%"></img>
 					<div class="mui-media-body">发布任务</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="ads_pub" url="ads/ads_pub.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="ads_pub" url="ads/ads_pub.html">
 					<img src="images/icon_3.png" width="50%"></img>
 					<div class="mui-media-body">广告投放</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="hy_shop" url="hy_shop.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="hy_shop" url="hy_shop.html">
 					<img src="images/icon_4.png" width="50%"></img>
 					<div class="mui-media-body">汇友商城</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="game_center" url="game_center.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="game_center" url="game_center.html">
 					<img src="images/icon_8.png" width="50%"></img>
 					<div class="mui-media-body">游戏天下</div>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="kf_center" url="kf_center.html">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="kf_center" url="kf_center.html">
 					<img src="images/icon_9.png" width="50%"></img>
 					<div class="mui-media-body">客服中心</div>
 				</li>
@@ -151,7 +151,7 @@
 					if (id == 'gen_qrcode') {
 						var token = plus.storage.getItem("token");
 						if (!token) {
-							mui.openWindow('login.html','login',{});
+							mui.openWindow('login.html','login');
 							return;
 						}
 					}
@@ -163,7 +163,7 @@
 							return;
 						} else {
 							var govipPage = plus.webview.getWebviewById('go_vip');
-							mui.fire(govipPage,'loadData',{token:token})
+							mui.fire(govipPage,'loadData',{token:token});
 						}
 					}
 

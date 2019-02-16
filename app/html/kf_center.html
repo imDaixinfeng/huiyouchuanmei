@@ -31,11 +31,11 @@
 					mui(".mui-table-view").on('tap','.mui-table-view-cell',function(){
 						var phone = this.children[0].innerText;
 						if (phone.length == 11) {
-							mui.confirm('是否需要拨打咨询热线？','提示',['拨打','取消'],function(e){
+							mui.confirm('是否需要拨打电话？','提示',['拨打','取消'],function(e){
 								if(e.index == 0){
 									plus.device.dial(phone,false);
 								}
-							});
+							},'div');
 						}
 					});
 				}

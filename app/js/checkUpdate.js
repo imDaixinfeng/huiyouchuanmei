@@ -6,7 +6,8 @@ function checkUpdate(wgtVer) {
 		timeout: 20000, //超时时间设置为20秒
 		async: false,
 		success: function(newVer) {
-			if (wgtVer != newVer) {
+			var reg = /\d+[.]\d+[.]\d+/g;
+			if (reg.test(newVer) && wgtVer != newVer) {
 				needUpdate = true;
 			}
 		}

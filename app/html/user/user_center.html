@@ -142,7 +142,6 @@
 									document.getElementById('groupname').innerText = data.groupname;
 								}
 							}
-							
 						}
 					});
 				});
@@ -161,7 +160,7 @@
 							});
 						} else {
 							if (id == 'logout') {
-								mui.confirm('确定要退出登录吗？', '退出提示', ['取消', '确认'], function(e) {
+								mui.confirm('确定要退出登录吗？', '提示', ['取消', '确认'], function(e) {
 									if (e.index == 1) {
 										plus.storage.removeItem('token');
 										document.getElementById('username').innerText = '';
@@ -174,7 +173,7 @@
 											id: 'login'
 										});
 									}
-								}, 'div');
+								});
 							} else {
 								mui.openWindow({
 									id: id,
